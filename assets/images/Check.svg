@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Check" transform="translate(-106 -51)">
+    <circle id="Elipse_1" data-name="Elipse 1" cx="12" cy="12" r="12" transform="translate(106 51)" fill="#00ff90"/>
+    <path id="Icon_feather-check" data-name="Icon feather-check" d="M16,9,9.125,15.875,6,12.75" transform="translate(107 50.563)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  </g>
+</svg>
