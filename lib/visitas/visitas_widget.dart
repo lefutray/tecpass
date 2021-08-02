@@ -92,7 +92,46 @@ class _VisitasWidgetState extends State<VisitasWidget> {
                                   ),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
-                                    children: [],
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 80,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFF1767A4),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              50, 18, 50, 18),
+                                          child: FFButtonWidget(
+                                            onPressed: () {
+                                              print('Button pressed ...');
+                                            },
+                                            text: 'Nueva Invitación',
+                                            icon: Icon(
+                                              Icons.add_circle_outline,
+                                              size: 15,
+                                            ),
+                                            options: FFButtonOptions(
+                                              width: 130,
+                                              height: 40,
+                                              color: Color(0xFFF3F4F6),
+                                              textStyle: FlutterFlowTheme
+                                                  .subtitle2
+                                                  .override(
+                                                fontFamily: 'Poppins',
+                                                color: Color(0xFF1767A4),
+                                              ),
+                                              borderSide: BorderSide(
+                                                color: Colors.transparent,
+                                                width: 1,
+                                              ),
+                                              borderRadius: 25,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 )
                               ],
@@ -829,6 +868,40 @@ class _VisitasWidgetState extends State<VisitasWidget> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 80,
+              decoration: BoxDecoration(
+                color: Color(0xFF1767A4),
+              ),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(50, 18, 50, 18),
+                child: FFButtonWidget(
+                  onPressed: () {
+                    print('Button pressed ...');
+                  },
+                  text: 'Nueva Invitación',
+                  icon: Icon(
+                    Icons.add_circle_outline,
+                    size: 15,
+                  ),
+                  options: FFButtonOptions(
+                    width: 130,
+                    height: 40,
+                    color: Color(0xFFF3F4F6),
+                    textStyle: FlutterFlowTheme.subtitle2.override(
+                      fontFamily: 'Poppins',
+                      color: Color(0xFF1767A4),
+                    ),
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                    borderRadius: 25,
                   ),
                 ),
               ),
