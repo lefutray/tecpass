@@ -415,7 +415,7 @@ class _AccesosWidgetState extends State<AccesosWidget> {
                                     color: Color(0x00EEEEEE),
                                   ),
                                   child: Image.asset(
-                                    'assets/images/salir.svg',
+                                    'assets/images/qr_img.png',
                                     width: 100,
                                     height: 100,
                                     fit: BoxFit.contain,

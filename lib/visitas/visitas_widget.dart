@@ -85,59 +85,6 @@ class _VisitasWidgetState extends State<VisitasWidget> {
                               children: [
                                 Container(
                                   width: MediaQuery.of(context).size.width,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF1767A4),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.fromLTRB(50, 18, 50, 18),
-                                    child: FFButtonWidget(
-                                      onPressed: () async {
-                                        await showDialog(
-                                          context: context,
-                                          builder: (alertDialogContext) {
-                                            return AlertDialog(
-                                              title: Text('Nueva Invitacion'),
-                                              content:
-                                                  Text('Mensaje de Prueba'),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          alertDialogContext),
-                                                  child: Text('Ok'),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      },
-                                      text: 'Nueva Invitación',
-                                      icon: Icon(
-                                        Icons.add_circle_outline,
-                                        size: 15,
-                                      ),
-                                      options: FFButtonOptions(
-                                        width: 130,
-                                        height: 30,
-                                        color: Color(0xFFF3F4F6),
-                                        textStyle:
-                                            FlutterFlowTheme.subtitle2.override(
-                                          fontFamily: 'Poppins',
-                                          color: Color(0xFF1767A4),
-                                        ),
-                                        borderSide: BorderSide(
-                                          color: Colors.transparent,
-                                          width: 1,
-                                        ),
-                                        borderRadius: 25,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
                                   height:
                                       MediaQuery.of(context).size.height * 1,
                                   decoration: BoxDecoration(

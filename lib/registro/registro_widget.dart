@@ -15,6 +15,7 @@ class RegistroWidget extends StatefulWidget {
 
 class _RegistroWidgetState extends State<RegistroWidget> {
   TextEditingController emailAddressController;
+  TextEditingController fonoUsuarioController;
   TextEditingController nombreCompletoController;
   TextEditingController rutUsuarioController;
   TextEditingController passwordController1;
@@ -27,6 +28,7 @@ class _RegistroWidgetState extends State<RegistroWidget> {
   void initState() {
     super.initState();
     emailAddressController = TextEditingController();
+    fonoUsuarioController = TextEditingController();
     nombreCompletoController = TextEditingController();
     rutUsuarioController = TextEditingController();
     passwordController1 = TextEditingController();
@@ -122,6 +124,64 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                             fontFamily: 'Poppins',
                             color: Color(0xFF2B343A),
                           ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: fonoUsuarioController,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'N° Celular Ej. 56935753175',
+                            labelStyle: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                              color: Color(0xFF95A1AC),
+                            ),
+                            hintText: 'Ingresa tu teléfono aqui...',
+                            hintStyle: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                              color: Color(0xFF95A1AC),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFDBE2E7),
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFDBE2E7),
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8),
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: FlutterFlowTheme.tertiaryColor,
+                            contentPadding: EdgeInsets.fromLTRB(16, 24, 0, 24),
+                          ),
+                          style: FlutterFlowTheme.bodyText1.override(
+                            fontFamily: 'Poppins',
+                            color: Color(0xFF2B343A),
+                          ),
+                          keyboardType: TextInputType.number,
                         ),
                       )
                     ],
