@@ -1,12 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.flutterflow.tecpass">
-   <uses-permission android:name="android.permission.INTERNET"/>
-
+    package="com.example.tec_pass">
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="tec_pass"
-        android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true">
-
+        android:label="TecPass"
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -41,7 +40,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-
-
     </application>
 </manifest>

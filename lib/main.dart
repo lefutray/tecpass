@@ -1,104 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:tec_pass/accesos/accesos_widget.dart';
-import 'flutter_flow/flutter_flow_theme.dart';
-import 'accesos/accesos_widget.dart';
-import 'visitas/visitas_widget.dart';
-import 'perfil/perfil_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
+
+import 'package:tec_pass/widgets/customappbar.dart';
+import 'package:tec_pass/views/access/access.dart';
+import 'package:tec_pass/views/profile.dart';
+import 'package:tec_pass/views/visits/visits.dart';
+import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
+import 'package:tec_pass/widgets/customnavbar.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => CustomNavBarBloc()),
+        BlocProvider(create: (_) => ContactsBloc()..add(ContactsLoad())),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'TecPass',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: NavBarPage(),
-    );
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  cacheImages(context) async {
+    await precacheImage(AssetImage('assets/Logo-tecpass-s.png'), context);
+    await precachePicture(ExactAssetPicture(SvgPicture.svgStringDecoder, 'assets/Check.svg'), context);
+    await precachePicture(ExactAssetPicture(SvgPicture.svgStringDecoder, 'assets/Cancelar.svg'), context);
   }
-}
-
-class NavBarPage extends StatefulWidget {
-  NavBarPage({Key key, this.initialPage}) : super(key: key);
-
-  final String initialPage;
-
-  @override
-  _NavBarPageState createState() => _NavBarPageState();
-}
-
-/// This is the private State class that goes with NavBarPage.
-class _NavBarPageState extends State<NavBarPage> {
-  String _currentPage = 'Accesos';
 
   @override
   void initState() {
     super.initState();
-    _currentPage = widget.initialPage ?? _currentPage;
+    cacheImages(context);
+  }
+
+  @override
+  void didChangeDependencies() {
+    cacheImages(context);
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final tabs = {
-      'Accesos': AccesosWidget(),
-      'Visitas': VisitasWidget(),
-      'Perfil': PerfilWidget(),
-    };
-    return Scaffold(
-      body: tabs[_currentPage],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.sensor_door_outlined,
-              color: Color(0xFF9E9E9E),
-              size: 30,
-            ),
-            activeIcon: Icon(
-              Icons.sensor_door_sharp,
-              color: FlutterFlowTheme.primaryColor,
-              size: 30,
-            ),
-            label: 'Accesos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_add_alt,
-              color: Color(0xFF9E9E9E),
-              size: 35,
-            ),
-            activeIcon: Icon(
-              Icons.person_add_alt_1,
-              color: FlutterFlowTheme.primaryColor,
-              size: 35,
-            ),
-            label: 'Visitas',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.location_history_outlined,
-              color: Color(0xFF9E9E9E),
-              size: 35,
-            ),
-            activeIcon: Icon(
-              Icons.location_history_rounded,
-              color: FlutterFlowTheme.primaryColor,
-              size: 35,
-            ),
-            label: 'Perfil',
-          )
-        ],
-        backgroundColor: Color(0xFF1767A4),
-        currentIndex: tabs.keys.toList().indexOf(_currentPage),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: FlutterFlowTheme.customColor1,
-        onTap: (i) => setState(() => _currentPage = tabs.keys.toList()[i]),
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(backgroundColor: Color(0xFF1767A4)),
+        primaryColor: Color(0xFF1767A4),
+        scaffoldBackgroundColor: Color(0xFF1F80B5),
+      ),
+      home: Scaffold(
+        appBar: CustomAppBar(),
+        body: BlocBuilder<CustomNavBarBloc, CustomNavBarState>(
+          builder: (context, state) {
+            if (state is AccessState) return AccessView();
+            if (state is VisitsState) return VisitsView();
+            if (state is ProfileState) return ProfileView();
+            return Center(child: CircularProgressIndicator());
+          },
+        ),
+        bottomNavigationBar: CustomNavBar(),
       ),
     );
   }
