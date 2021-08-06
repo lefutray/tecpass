@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
 
+import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
 import 'package:tec_pass/widgets/customappbar.dart';
 import 'package:tec_pass/views/access/access.dart';
 import 'package:tec_pass/views/profile.dart';
@@ -15,7 +16,7 @@ void main() {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => CustomNavBarBloc()),
-        BlocProvider(create: (_) => ContactsBloc()..add(ContactsLoad())),
+        BlocProvider(create: (_) => ContactsBloc()),
       ],
       child: MyApp(),
     ),
@@ -59,10 +60,16 @@ class _MyAppState extends State<MyApp> {
         appBar: CustomAppBar(),
         body: BlocBuilder<CustomNavBarBloc, CustomNavBarState>(
           builder: (context, state) {
-            if (state is AccessState) return AccessView();
-            if (state is VisitsState) return VisitsView();
-            if (state is ProfileState) return ProfileView();
-            return Center(child: CircularProgressIndicator());
+            switch (state.runtimeType) {
+              case AccessState:
+                return AccessView();
+              case VisitsState:
+                return VisitsView();
+              case ProfileState:
+                return ProfileView();
+              default:
+                return Center(child: Text('ERROR: NAVBAR COULDN`T BE BUILT'));
+            }
           },
         ),
         bottomNavigationBar: CustomNavBar(),
