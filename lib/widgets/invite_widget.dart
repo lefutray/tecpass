@@ -1,225 +1,144 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+
+import 'package:tec_pass/models/invite.dart';
 
 class InviteWidget extends StatelessWidget {
-  const InviteWidget({Key? key}) : super(key: key);
+  const InviteWidget({Key? key, this.invite}) : super(key: key);
+  final Invite? invite;
+
+  @override
+  Widget build(BuildContext context) {
+    late final color;
+    late final inviteTitle;
+    List<Widget> buttons = [];
+    switch (invite!.status) {
+      case InviteStatus.accepted:
+        color = Color(0xFF5BC693);
+        inviteTitle = 'Aceptada';
+        buttons.add(_ActionInvite(icon: Icons.qr_code, color: Color(0xFF40FE90)));
+        buttons.add(SizedBox(width: 10));
+        buttons.add(_ActionInvite(icon: Icons.phone, color: Color(0xFF40FE90)));
+        break;
+      case InviteStatus.declined:
+        color = Color(0xFFE74C3C);
+        inviteTitle = 'Rechazada';
+        break;
+      case InviteStatus.pending:
+        color = Color(0xFF3191C0);
+        inviteTitle = 'Nueva Invitación';
+        buttons.add(_ActionInvite(path: 'assets/Cancelar.svg'));
+        buttons.add(SizedBox(width: 10));
+        buttons.add(_ActionInvite(path: 'assets/Check.svg'));
+        break;
+    }
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: color, width: 2)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 30,
+            decoration: BoxDecoration(
+              color: color,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: Icon(Icons.insert_invitation, color: Colors.white, size: 18),
+                ),
+                Text(
+                  inviteTitle,
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16),
+                )
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Color(0x00EEEEEE),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(10, 15, 0, 0),
+                  child: Text(
+                    '${this.invite!.place.name} - Para ${this.invite!.recipientName}',
+                    style: TextStyle(color: Color(0xFFF3F4F6), fontSize: 15, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: EdgeInsets.only(left: 10, bottom: (inviteTitle != 'Rechazada') ? 20 : 0),
+                child: Text(
+                  printDate(this.invite!) + ' - ' + printTime(this.invite!),
+                  style: TextStyle(color: Color(0xFFF3F4F6), fontSize: 15, fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+          if (inviteTitle != 'Rechazada')
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ...buttons,
+              ],
+            ),
+          SizedBox(height: 15),
+        ],
+      ),
+    );
+  }
+
+  String printDate(Invite invite) {
+    final date = DateFormat("dd/MM/yyyy").format(invite.date);
+    return date;
+  }
+
+  String printTime(Invite invite) {
+    final date = DateFormat("HH:mm").format(invite.date);
+    return date + 'hs';
+  }
+}
+
+class _ActionInvite extends StatelessWidget {
+  _ActionInvite({this.path, this.icon, this.color});
+  final String? path;
+  final IconData? icon;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 320,
-      height: 180,
+      height: 50,
+      width: 50,
+      margin: EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-        color: Color(0xFF1767A4),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: Color(0xFF1F80B5),
-          width: 2,
-        ),
+        color: color ?? Colors.transparent,
+        shape: BoxShape.circle,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 22,
-            decoration: BoxDecoration(
-              color: Color(0xFF1F80B5),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(6, 0, 0, 0),
-                  child: FaIcon(
-                    FontAwesomeIcons.envelope,
-                    color: Colors.white,
-                    size: 15,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                  child: Text(
-                    'Nueva Invitación',
-                    // style: FlutterFlowTheme.bodyText1.override(
-                    //   fontFamily: 'Poppins',
-                    //   color: Colors.white,
-                    // ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 10,
-            height: 100,
-            decoration: BoxDecoration(
-              color: Color(0x00EEEEEE),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Color(0x00EEEEEE),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(10, 15, 0, 0),
-                    child: Text(
-                      'Invitación para [NombreApellido]',
-                      // style: FlutterFlowTheme.bodyText1.override(
-                      //   fontFamily: 'Poppins',
-                      //   color: Color(0xFFF3F4F6),
-                      //   fontSize: 15,
-                      //   fontWeight: FontWeight.w600,
-                      // ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: Color(0x00EEEEEE),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(
-                      '22-02-2022',
-                      // style: FlutterFlowTheme.bodyText1.override(
-                      //   fontFamily: 'Poppins',
-                      //   color: Color(0xFFF3F4F6),
-                      //   fontSize: 15,
-                      //   fontWeight: FontWeight.w600,
-                      // ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: Color(0x00EEEEEE),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(
-                      '10:00:00',
-                      // style: FlutterFlowTheme.bodyText1.override(
-                      //   fontFamily: 'Poppins',
-                      //   color: Color(0xFFF3F4F6),
-                      //   fontSize: 15,
-                      //   fontWeight: FontWeight.w600,
-                      // ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 50,
-            decoration: BoxDecoration(
-              color: Color(0x00EEEEEE),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0x00EEEEEE),
-                      border: Border.all(
-                        color: Color(0x00EEEEEE),
-                      ),
-                    ),
-                    child: InkWell(
-                      onTap: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (alertDialogContext) {
-                            return AlertDialog(
-                              title: Text('Aceptar'),
-                              content: Text('Mensaje de Prueba'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(alertDialogContext),
-                                  child: Text('Ok'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/Check.svg',
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0x00EEEEEE),
-                    ),
-                    child: InkWell(
-                      onTap: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (alertDialogContext) {
-                            return AlertDialog(
-                              title: Text('Cancelar'),
-                              content: Text('Mensaje de Prueba'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(alertDialogContext),
-                                  child: Text('Ok'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/Cancelar.svg',
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        color: Colors.white,
+        iconSize: 30,
+        splashRadius: 30,
+        onPressed: () async {},
+        icon: icon != null
+            ? Icon(this.icon)
+            : SvgPicture.asset(
+                path!,
+                height: 50,
+                width: 50,
+                fit: BoxFit.fitHeight,
+              ),
       ),
     );
   }

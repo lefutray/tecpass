@@ -9,7 +9,7 @@ class Invite {
   Invite({
     required this.date,
     required this.place,
-    this.recipientName = "Dan!",
+    this.recipientName = "Dan",
     this.status = InviteStatus.pending,
   });
 }
