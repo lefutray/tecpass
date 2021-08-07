@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'contacts_event.dart';
 part 'contacts_state.dart';
@@ -13,16 +14,32 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   Stream<ContactsState> mapEventToState(ContactsEvent event) async* {
     switch (event.runtimeType) {
       case ContactsLoad:
-        // try {
+        // if we don't have permission, we should show the permission prompt
         if (await FlutterContacts.requestPermission()) {
           final contacts = await FlutterContacts.getContacts(withProperties: true);
-          if (contacts.isNotEmpty) {
+          if (contacts.isEmpty)
+            yield ContactsPermissionDenied();
+          else
             yield ContactsLoaded(allContacts: contacts);
-          } else {
-            yield ContactsPermissionDenied('No contacts found');
-          }
         } else {
-          yield ContactsPermissionDenied('No permission to access contacts');
+          final status = await Permission.contacts.request();
+          switch (status) {
+            case PermissionStatus.granted:
+              final contacts = await FlutterContacts.getContacts(withProperties: true);
+              if (contacts.isEmpty)
+                yield ContactsPermissionDenied();
+              else
+                yield ContactsLoaded(allContacts: contacts);
+              break;
+            case PermissionStatus.denied:
+              yield ContactsPermissionDenied();
+              break;
+            case PermissionStatus.permanentlyDenied:
+              yield ContactsPermissionDeniedPermanently();
+              break;
+            default:
+              break;
+          }
         }
         break;
       case ContactsToggleSelection:

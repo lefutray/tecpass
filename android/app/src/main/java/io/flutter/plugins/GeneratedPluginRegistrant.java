@@ -15,6 +15,7 @@ import io.flutter.embedding.engine.plugins.shim.ShimPluginRegistry;
 public final class GeneratedPluginRegistrant {
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
     ShimPluginRegistry shimPluginRegistry = new ShimPluginRegistry(flutterEngine);
+    flutterEngine.getPlugins().add(new com.example.appsettings.AppSettingsPlugin());
     flutterEngine.getPlugins().add(new co.quis.flutter_contacts.FlutterContactsPlugin());
       com.example.flutter_sms.FlutterSmsPlugin.registerWith(shimPluginRegistry.registrarFor("com.example.flutter_sms.FlutterSmsPlugin"));
     flutterEngine.getPlugins().add(new io.github.ponnamkarthik.toast.fluttertoast.FlutterToastPlugin());

@@ -1,10 +1,10 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:flutter_sms/flutter_sms.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:app_settings/app_settings.dart';
+
+import 'package:tec_pass/helpers/sms.dart';
 import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
 import 'package:tec_pass/widgets/contact_widget.dart';
 
@@ -18,69 +18,109 @@ class ContactsPage extends StatelessWidget {
         switch (state.runtimeType) {
           case ContactsInitial:
             context.read<ContactsBloc>().add(ContactsLoad());
-            return Center(child: Text('Loading...'));
-          case ContactsPermissionDenied:
-            return Column(
-              children: [
-                Center(child: Text('Permission denied\nERROR: ${(state as ContactsPermissionDenied).error}')),
-                ElevatedButton(
-                  onPressed: () async {
-                    final permitted = await FlutterContacts.requestPermission();
-                    if (permitted) {
-                      context.read<ContactsBloc>().add(ContactsLoad());
-                    }
-                  },
-                  child: Text('Allow access'),
-                ),
-              ],
-            );
+            return Center(child: CircularProgressIndicator(color: Colors.white));
           case ContactsLoaded:
-            state as ContactsLoaded; // tell flutter that this is a ContactsLoaded state
-            return Scaffold(
-              body: ListView.builder(
-                itemCount: state.allContacts.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return FadeInLeft(
-                    duration: Duration(milliseconds: 300),
-                    child: ContactWidget(
-                      state.allContacts[index],
-                      state.selectedContacts.contains(state.allContacts[index]),
-                      onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(index)),
-                    ),
-                  );
-                },
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () => _sendSMS(context.read<ContactsBloc>()),
-                child: Icon(Icons.send),
-              ),
-            );
+            return _LoadedContactsWidget(state as ContactsLoaded);
+          case ContactsNotFound:
+            return _NoContacts(state);
+          case ContactsPermissionDenied:
+            return _PermissionDenied(state);
+          case ContactsPermissionDeniedPermanently:
+            return _PermissionDenied(state);
           default:
             return Center(child: Text('The State ${state.runtimeType} was not recognized.'));
         }
       },
     );
   }
+}
 
-  void _sendSMS(ContactsBloc contactsBloc) async {
-    if (contactsBloc.state is ContactsLoaded) {
-      Future<void> showError({PlatformException? error}) async {
-        await Fluttertoast.showToast(
-          timeInSecForIosWeb: 5,
-          toastLength: Toast.LENGTH_LONG,
-          msg: 'Ocurrió un error al enviar el mensaje.\nPor favor, inténtalo de nuevo. ${(error != null) ? '\n\nERROR: ${error.message}' : ''}',
+class _LoadedContactsWidget extends StatelessWidget {
+  const _LoadedContactsWidget(this.state, {Key? key}) : super(key: key);
+  final ContactsLoaded state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: state.allContacts.length,
+        itemBuilder: (BuildContext context, int index) {
+          return FadeIn(
+            duration: Duration(milliseconds: 300),
+            child: ContactWidget(
+              state.allContacts[index],
+              state.selectedContacts.contains(state.allContacts[index]),
+              onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(index)),
+            ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => sendSMStoContacts(context.read<ContactsBloc>().state),
+        child: Icon(Icons.send),
+      ),
+    );
+  }
+}
+
+class _NoContacts extends StatelessWidget {
+  const _NoContacts(this.state);
+  final ContactsState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Text(
+                'ERROR: No hay contactos para mostrar.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
         );
-      }
+      },
+    );
+  }
+}
 
-      final List<String> recipients = (contactsBloc.state as ContactsLoaded).selectedContacts.map((contact) => contact.phones.first.number).toList();
-      try {
-        final String? result = await sendSMS(message: 'Te invito a este lugar.', recipients: recipients);
-        if (result != null && result == 'Error sending sms') {
-          showError();
-        }
-      } on PlatformException catch (error) {
-        showError(error: error);
-      }
-    }
+class _PermissionDenied extends StatelessWidget {
+  const _PermissionDenied(this.state);
+  final ContactsState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            'Esta aplicación necesita permiso para acceder a los contactos',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        TextButton(
+          child: Text(
+            'Inténtalo de nuevo'.toUpperCase(),
+            style: TextStyle(color: Colors.white),
+          ),
+          style: TextButton.styleFrom(
+            primary: Colors.grey,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+          ),
+          onPressed: () async {
+            if (state is ContactsPermissionDeniedPermanently) await AppSettings.openAppSettings();
+            context.read<ContactsBloc>().add(ContactsLoad());
+          },
+        ),
+      ],
+    );
   }
 }

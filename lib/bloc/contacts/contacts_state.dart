@@ -4,11 +4,6 @@ abstract class ContactsState {}
 
 class ContactsInitial extends ContactsState {}
 
-class ContactsPermissionDenied extends ContactsState {
-  final error;
-  ContactsPermissionDenied(this.error);
-}
-
 class ContactsLoaded extends ContactsState {
   ContactsLoaded({
     this.allContacts = const [],
@@ -25,3 +20,9 @@ class ContactsLoaded extends ContactsState {
     );
   }
 }
+
+class ContactsPermissionDenied extends ContactsState {}
+
+class ContactsPermissionDeniedPermanently extends ContactsState {}
+
+class ContactsNotFound extends ContactsState {}

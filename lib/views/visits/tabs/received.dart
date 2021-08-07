@@ -1,5 +1,6 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+
+import 'package:animate_do/animate_do.dart';
 
 import 'package:tec_pass/models/invite.dart';
 import 'package:tec_pass/models/place.dart';
@@ -19,7 +20,7 @@ class ReceivedPage extends StatelessWidget {
       body: ListView.builder(
         itemCount: 20,
         itemBuilder: (BuildContext context, int index) {
-          return FadeInLeft(
+          return FadeIn(
             duration: Duration(milliseconds: 500),
             child: widgets[index % 3],
           );
