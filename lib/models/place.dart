@@ -8,6 +8,7 @@ class Place {
   Place(this.id, this.name);
 
   Future<void> enter() async {
+    await Fluttertoast.cancel();
     await Fluttertoast.showToast(
       msg: "Entrando...",
       toastLength: Toast.LENGTH_SHORT,
@@ -19,6 +20,7 @@ class Place {
   }
 
   Future<void> exit() async {
+    await Fluttertoast.cancel();
     await Fluttertoast.showToast(
       msg: "Saliendo...",
       toastLength: Toast.LENGTH_SHORT,
