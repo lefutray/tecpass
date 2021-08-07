@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   animate_do: ^2.0.0
+  animated_theme_switcher: ^2.0.1
   app_settings: ^4.1.1
   bloc: ^7.0.0
   cupertino_icons: ^1.0.2
@@ -34,7 +35,9 @@ dependencies:
   fluttertoast: ^8.0.8
   font_awesome_flutter: ^9.1.0
   intl: ^0.17.0
+  lottie: ^1.1.0
   permission_handler: ^8.1.4+2
+  pinput: ^1.2.0
   qr_flutter: ^4.0.0
 
 dev_dependencies:

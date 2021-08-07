@@ -43,9 +43,6 @@ class CustomNavBar extends StatelessWidget {
               label: 'Perfil',
             )
           ],
-          backgroundColor: Color(0xFF1767A4),
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Color(0xFFA2C2DB),
         );
       },
     );
