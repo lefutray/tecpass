@@ -5,15 +5,15 @@ import 'package:intl/intl.dart';
 import 'package:tec_pass/models/invite.dart';
 
 class InviteWidget extends StatelessWidget {
-  const InviteWidget({Key? key, this.invite}) : super(key: key);
-  final Invite? invite;
+  const InviteWidget({Key? key, required this.invite}) : super(key: key);
+  final Invite invite;
 
   @override
   Widget build(BuildContext context) {
     late final color;
     late final inviteTitle;
     List<Widget> buttons = [];
-    switch (invite!.status) {
+    switch (invite.status) {
       case InviteStatus.accepted:
         color = Color(0xFF5BC693);
         inviteTitle = 'Aceptada';
@@ -70,7 +70,7 @@ class InviteWidget extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(10, 15, 0, 0),
                   child: Text(
-                    '${this.invite!.place.name} - Para ${this.invite!.recipientName}',
+                    '${this.invite.place.name} - Para ${this.invite.recipientName}',
                     style: TextStyle(color: Color(0xFFF3F4F6), fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -79,7 +79,7 @@ class InviteWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 10, bottom: (inviteTitle != 'Rechazada') ? 20 : 0),
                 child: Text(
-                  printDate(this.invite!) + ' - ' + printTime(this.invite!),
+                  printDate(this.invite) + ' - ' + printTime(this.invite),
                   style: TextStyle(color: Color(0xFFF3F4F6), fontSize: 15, fontWeight: FontWeight.w600),
                 ),
               ),

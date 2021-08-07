@@ -2,36 +2,60 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'contacts_event.dart';
 part 'contacts_state.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
-  ContactsBloc() : super(ContactsState());
+  ContactsBloc() : super(ContactsInitial());
 
   @override
   Stream<ContactsState> mapEventToState(ContactsEvent event) async* {
-    if (event is ContactsLoad) {
-      if (await FlutterContacts.requestPermission()) {
-        try {
-          final contacts = await FlutterContacts.getContacts(withProperties: true, withPhoto: true);
-          if (contacts.isNotEmpty) yield ContactsState(allContacts: contacts);
-        } catch (e) {
-          print(e);
-        }
-      }
-    }
-    if (event is ContactsToggleSelection) {
-      if (state.allContacts.isNotEmpty) {
-        final toggle = state.allContacts[event.index];
-        if (state.selectedContacts.contains(toggle)) {
-          final selectedContacts = this.state.selectedContacts..remove(toggle);
-          yield this.state.copyWith(selectedContacts: selectedContacts);
+    switch (event.runtimeType) {
+      case ContactsLoad:
+        // if we don't have permission, we should show the permission prompt
+        if (await FlutterContacts.requestPermission()) {
+          final contacts = await FlutterContacts.getContacts(withProperties: true);
+          if (contacts.isEmpty)
+            yield ContactsPermissionDenied();
+          else
+            yield ContactsLoaded(allContacts: contacts);
         } else {
-          final selectedContacts = [...this.state.selectedContacts, toggle];
-          yield this.state.copyWith(selectedContacts: selectedContacts);
+          final status = await Permission.contacts.request();
+          switch (status) {
+            case PermissionStatus.granted:
+              final contacts = await FlutterContacts.getContacts(withProperties: true);
+              if (contacts.isEmpty)
+                yield ContactsPermissionDenied();
+              else
+                yield ContactsLoaded(allContacts: contacts);
+              break;
+            case PermissionStatus.denied:
+              yield ContactsPermissionDenied();
+              break;
+            case PermissionStatus.permanentlyDenied:
+              yield ContactsPermissionDeniedPermanently();
+              break;
+            default:
+              break;
+          }
         }
-      }
+        break;
+      case ContactsToggleSelection:
+        final currentState = state as ContactsLoaded;
+        if (currentState.allContacts.isNotEmpty) {
+          final toggle = currentState.allContacts[(event as ContactsToggleSelection).index];
+          if (currentState.selectedContacts.contains(toggle)) {
+            final selectedContacts = currentState.selectedContacts..remove(toggle);
+            yield currentState.copyWith(selectedContacts: selectedContacts);
+          } else {
+            final selectedContacts = [...currentState.selectedContacts, toggle];
+            yield currentState.copyWith(selectedContacts: selectedContacts);
+          }
+        }
+        break;
+      default:
     }
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tec_pass/helpers/screen_orientation.dart';
+import 'package:tec_pass/helpers/orientation.dart';
 import 'package:tec_pass/views/access/tabs/access_bikes.dart';
 import 'package:tec_pass/views/access/tabs/access_cars.dart';
 import 'package:tec_pass/views/access/tabs/access_people.dart';
@@ -13,22 +13,23 @@ class AccessView extends StatefulWidget {
 }
 
 class _AccessViewState extends State<AccessView> with SingleTickerProviderStateMixin {
-  late TabController _controller;
+  late final TabController tabController;
 
   @override
   void initState() {
-    super.initState();
-    _controller = TabController(length: 3, vsync: this);
-    _controller.addListener(() {
-      if (!_controller.indexIsChanging) {
-        (_controller.index == 0) ? allOrientations() : portraitOnly();
-      }
+    tabController = TabController(length: 3, vsync: this);
+    tabController.addListener(() {
+      if (!tabController.indexIsChanging && tabController.index != 0)
+        portraitOnly();
+      else
+        allOrientations();
     });
+    super.initState();
   }
 
   @override
   void dispose() {
-    allOrientations();
+    tabController.dispose();
     super.dispose();
   }
 
@@ -36,7 +37,7 @@ class _AccessViewState extends State<AccessView> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TabBar(
-        controller: _controller,
+        controller: tabController,
         indicatorColor: Colors.green,
         tabs: [
           Tab(text: "Personas", icon: Icon(Icons.person)),
@@ -45,7 +46,7 @@ class _AccessViewState extends State<AccessView> with SingleTickerProviderStateM
         ],
       ),
       body: TabBarView(
-        controller: _controller,
+        controller: tabController,
         children: [
           AccessPeopleView(),
           AccessCarsView(),

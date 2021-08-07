@@ -7,59 +7,47 @@ class CustomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final customNavBarBloc = BlocProvider.of<CustomNavBarBloc>(context);
-    return BlocBuilder(
-      bloc: customNavBarBloc,
+    return BlocBuilder<CustomNavBarBloc, CustomNavBarState>(
       builder: (BuildContext context, CustomNavBarState state) {
-        if (state is Visits) {
-          return buildNavBar(customNavBarBloc, state.index);
-        } else if (state is Profile) {
-          return buildNavBar(customNavBarBloc, state.index);
-        } else {
-          return buildNavBar(customNavBarBloc, state.index);
-        }
+        return BottomNavigationBar(
+          currentIndex: state.index,
+          onTap: (index) {
+            if (index != state.index) {
+              switch (index) {
+                case 0:
+                  context.read<CustomNavBarBloc>().add(Access());
+                  break;
+                case 1:
+                  context.read<CustomNavBarBloc>().add(Visits());
+                  break;
+                default:
+                  context.read<CustomNavBarBloc>().add(Profile());
+                  break;
+              }
+            }
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.sensor_door_outlined),
+              activeIcon: Icon(Icons.sensor_door_sharp),
+              label: 'Accesos',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_add_alt),
+              activeIcon: Icon(Icons.person_add_alt_1),
+              label: 'Visitas',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.location_history_outlined),
+              activeIcon: Icon(Icons.location_history_rounded),
+              label: 'Perfil',
+            )
+          ],
+          backgroundColor: Color(0xFF1767A4),
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Color(0xFFA2C2DB),
+        );
       },
-    );
-  }
-
-  buildNavBar(CustomNavBarBloc customNavBarBloc, int currentIndex) {
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
-      onTap: (index) {
-        if (index != currentIndex) {
-          switch (index) {
-            case 0:
-              customNavBarBloc.add(Access());
-              break;
-            case 1:
-              customNavBarBloc.add(Visits());
-              break;
-            default:
-              customNavBarBloc.add(Profile());
-              break;
-          }
-        }
-      },
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.sensor_door_outlined),
-          activeIcon: Icon(Icons.sensor_door_sharp),
-          label: 'Accesos',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_add_alt),
-          activeIcon: Icon(Icons.person_add_alt_1),
-          label: 'Visitas',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.location_history_outlined),
-          activeIcon: Icon(Icons.location_history_rounded),
-          label: 'Perfil',
-        )
-      ],
-      backgroundColor: Color(0xFF1767A4),
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Color(0xFFA2C2DB),
     );
   }
 }
