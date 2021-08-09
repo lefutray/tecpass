@@ -33,51 +33,45 @@ class ContactSearch extends SearchDelegate<Contact?> {
     return Container();
   }
 
+  bool resultMatches(Contact element) {
+    return element.displayName.toLowerCase().startsWith(query.toLowerCase());
+  }
+
   @override
   Widget buildSuggestions(BuildContext context) {
     return BlocBuilder<ContactsBloc, ContactsState>(
       builder: (context, state) {
         state as ContactsLoaded;
-        List<Contact> suggestions = state.allContacts.where((Contact element) => element.displayName.toLowerCase().startsWith(query.toLowerCase())).toList();
-        if (suggestions.isEmpty) {
-          return ListView(
-            children: [
-              ListView.builder(
-                itemCount: state.selectedContacts.length,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return ContactWidget(
-                    state.selectedContacts[index],
-                    true,
-                    onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(contact: state.selectedContacts[index])),
-                  );
-                },
-              ),
-              ListView.builder(
-                itemCount: state.unselectedContacts.length,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return ContactWidget(
-                    state.unselectedContacts[index],
-                    false,
-                    onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(contact: state.unselectedContacts[index])),
-                  );
-                },
-              ),
-            ],
+        List<Contact> suggestions = state.allContacts.where(resultMatches).toList();
+        if (query.isEmpty) {
+          return ListView.builder(
+            itemCount: 1,
+            itemBuilder: (BuildContext context, int index) {
+              return Column(
+                children: [
+                  ...contactsList(context, state.selectedContacts),
+                  ...contactsList(context, state.unselectedContacts),
+                ],
+              );
+            },
           );
         }
-        return ListView.builder(
-          itemCount: suggestions.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ContactWidget(
-              suggestions[index],
-              state.selectedContacts.contains(suggestions[index]),
-              onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(contact: suggestions[index])),
-            );
-          },
-        );
+        return ListView(children: contactsList(context, suggestions));
       },
+    );
+  }
+
+  List<Widget> contactsList(BuildContext context, List<Contact> contacts) {
+    return List.generate(
+      contacts.length,
+      (index) => ContactWidget(
+        contacts[index],
+        (BlocProvider.of<ContactsBloc>(context).state as ContactsLoaded).selectedContacts.contains(contacts[index]),
+        onChanged: (_) {
+          context.read<ContactsBloc>().add(ContactsToggleSelection(contacts[index]));
+          query = '';
+        },
+      ),
     );
   }
 }

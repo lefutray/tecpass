@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 
 import 'package:tec_pass/helpers/sms.dart';
 import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
@@ -51,39 +52,9 @@ class _LoadedContactsWidget extends StatelessWidget {
         child: ListView(
           controller: scrollController,
           children: [
-            ListTile(
-              title: Text('Buscar contacto'),
-              trailing: Icon(Icons.search),
-              onTap: () {
-                showSearch(context: context, delegate: ContactSearch());
-              },
-            ),
-            ...List.generate(
-              state.selectedContacts.length,
-              (int index) {
-                return FadeIn(
-                  duration: Duration(milliseconds: 200),
-                  child: ContactWidget(
-                    state.selectedContacts[index],
-                    state.selectedContacts.contains(state.selectedContacts[index]),
-                    onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(contact: state.selectedContacts[index])),
-                  ),
-                );
-              },
-            ).toList(),
-            ...List.generate(
-              state.unselectedContacts.length,
-              (int index) {
-                return FadeIn(
-                  duration: Duration(milliseconds: 200),
-                  child: ContactWidget(
-                    state.unselectedContacts[index],
-                    state.selectedContacts.contains(state.unselectedContacts[index]),
-                    onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(contact: state.unselectedContacts[index])),
-                  ),
-                );
-              },
-            ).toList(),
+            searchContact(context),
+            ...contactsList(context, state.selectedContacts),
+            ...contactsList(context, state.unselectedContacts),
           ],
         ),
       ),
@@ -91,6 +62,32 @@ class _LoadedContactsWidget extends StatelessWidget {
         onPressed: () => sendSMStoContacts(context.read<ContactsBloc>().state),
         child: Icon(Icons.send),
       ),
+    );
+  }
+
+  Widget searchContact(BuildContext context) {
+    return ListTile(
+      title: Text('Buscar contacto'),
+      trailing: Icon(Icons.search),
+      onTap: () {
+        showSearch(context: context, delegate: ContactSearch());
+      },
+    );
+  }
+
+  List<Widget> contactsList(BuildContext context, List<Contact> contacts) {
+    return List.generate(
+      contacts.length,
+      (int index) {
+        return FadeIn(
+          duration: Duration(milliseconds: 200),
+          child: ContactWidget(
+            contacts[index],
+            (BlocProvider.of<ContactsBloc>(context).state as ContactsLoaded).selectedContacts.contains(contacts[index]),
+            onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(contacts[index])),
+          ),
+        );
+      },
     );
   }
 }

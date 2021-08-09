@@ -14,13 +14,15 @@ void sendSMStoContacts(ContactsState contactsState) async {
     }
 
     final List<String> recipients = contactsState.selectedContacts.map((contact) => contact.phones.first.number).toList();
-    try {
-      final String? result = await sendSMS(message: 'Te invito a este lugar.', recipients: recipients);
-      if (result != null && result == 'Error sending sms') {
-        showError();
+    if (recipients.isNotEmpty) {
+      try {
+        final String? result = await sendSMS(message: 'Te invito a este lugar.', recipients: recipients);
+        if (result != null && result == 'Error sending sms') {
+          showError();
+        }
+      } on PlatformException catch (error) {
+        showError(error: error);
       }
-    } on PlatformException catch (error) {
-      showError(error: error);
     }
   }
 }

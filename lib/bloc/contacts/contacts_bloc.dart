@@ -55,12 +55,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         final currentState = state as ContactsLoaded;
         event as ContactsToggleSelection;
         if (currentState.allContacts.isNotEmpty) {
-          late final Contact toggle;
-          if (event.index != null) {
-            toggle = currentState.allContacts[event.index!];
-          } else if (event.contact != null) {
-            toggle = event.contact!;
-          }
+          late final Contact toggle = event.contact;
           if (currentState.selectedContacts.contains(toggle)) {
             final selectedContacts = currentState.selectedContacts..remove(toggle);
             final unselectedContacts = [...currentState.unselectedContacts, toggle];

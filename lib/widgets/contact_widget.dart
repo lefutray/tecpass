@@ -11,18 +11,21 @@ class ContactWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-      title: Row(
-        children: [
-          _Avatar(contact: contact),
-          SizedBox(width: 15),
-          Text(
-            '${contact.displayName}',
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: this.isSelected ? Colors.white : Colors.white70),
-          ),
-        ],
+      title: Text(
+        '${contact.displayName}',
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: this.isSelected ? Colors.white : Colors.white70),
       ),
+      secondary: _Avatar(contact: contact),
+      subtitle: Text(
+        contact.phones.isEmpty ? 'Sin número' : contact.phones.first.number,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: this.isSelected ? Colors.white : Colors.white70),
+      ),
+      activeColor: Colors.white,
+      checkColor: Colors.black,
       onChanged: this.onChanged,
+      selected: this.isSelected,
       value: this.isSelected,
     );
   }
@@ -32,12 +35,10 @@ class _Avatar extends StatelessWidget {
   const _Avatar({
     Key? key,
     required this.contact,
-    this.radius = 18,
     this.icon = Icons.person,
   }) : super(key: key);
 
   final Contact contact;
-  final double radius;
   final IconData icon;
 
   @override
@@ -45,11 +46,9 @@ class _Avatar extends StatelessWidget {
     if (contact.photoOrThumbnail != null) {
       return CircleAvatar(
         backgroundImage: MemoryImage(contact.photoOrThumbnail!),
-        radius: radius,
       );
     }
     return CircleAvatar(
-      radius: radius,
       child: Icon(icon),
     );
   }
