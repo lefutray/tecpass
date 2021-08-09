@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tec_pass/views/home.dart';
 
 class App {
   static final App _instance = App._();
@@ -16,14 +18,44 @@ class App {
     _preferences = await SharedPreferences.getInstance();
     theme = _Theme(this._preferences);
   }
+
+  void cacheImages(BuildContext context) async {
+    await precacheImage(AssetImage('assets/Logo-tecpass-s.png'), context);
+    await precachePicture(ExactAssetPicture(SvgPicture.svgStringDecoder, 'assets/Check.svg'), context);
+    await precachePicture(ExactAssetPicture(SvgPicture.svgStringDecoder, 'assets/Cancelar.svg'), context);
+  }
+
+  Route<dynamic>? routes(RouteSettings? settings) {
+    switch (settings?.name) {
+      case 'home':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => HomePage(),
+        );
+      case 'login':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => HomePage(),
+        );
+      case 'register':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => HomePage(),
+        );
+    }
+  }
+
 }
 
 class _Theme {
   _Theme(this._preferences) {
-    _themes = {'dark': darkTheme, 'light': lightTheme};
+    _themes = {
+      'dark': darkTheme,
+      'light': lightTheme,
+    };
   }
 
-  late final SharedPreferences _preferences;
+  final SharedPreferences _preferences;
 
   ThemeData _auto() {
     if (WidgetsBinding.instance?.window.platformBrightness == Brightness.dark) {
@@ -45,7 +77,10 @@ class _Theme {
 
   late final Map<String, ThemeData> _themes;
 
-  final lightTheme = ThemeData.light().copyWith(
+  ThemeData get lightTheme => _lightTheme;
+  ThemeData get darkTheme => _darkTheme;
+
+  final _lightTheme = ThemeData.light().copyWith(
     appBarTheme: AppBarTheme(backgroundColor: Color(0xFF1767a4), centerTitle: true),
     primaryColor: Color(0xFF1767a4),
     scaffoldBackgroundColor: Color(0xFF1767a4),
@@ -57,7 +92,7 @@ class _Theme {
     ),
   );
 
-  final darkTheme = ThemeData.dark().copyWith(
+  final _darkTheme = ThemeData.dark().copyWith(
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white54,

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -67,14 +68,17 @@ class __ThemeSwitchingIconButtonState extends State<_ThemeSwitchingIconButton> w
           margin: EdgeInsets.only(right: 5),
           child: IconButton(
             onPressed: () async {
-              if (app.theme.current.brightness == Brightness.dark) {
-                _controller.reverse();
-                await app.theme.changeTheme('light');
-                ThemeSwitcher.of(context)?.changeTheme(theme: app.theme.lightTheme);
-              } else {
-                _controller.forward();
-                await app.theme.changeTheme('dark');
-                ThemeSwitcher.of(context)?.changeTheme(theme: app.theme.darkTheme);
+              final busy = ThemeProvider.instanceOf(context)?.isBusy ?? false;
+              if (!busy) {
+                if (app.theme.current.brightness == Brightness.dark) {
+                  _controller.reverse();
+                  await app.theme.changeTheme('light');
+                  ThemeSwitcher.of(context)?.changeTheme(theme: app.theme.lightTheme);
+                } else {
+                  _controller.forward();
+                  await app.theme.changeTheme('dark');
+                  ThemeSwitcher.of(context)?.changeTheme(theme: app.theme.darkTheme);
+                }
               }
             },
             icon: Transform.rotate(

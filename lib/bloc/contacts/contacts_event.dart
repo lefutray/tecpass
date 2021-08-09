@@ -5,6 +5,7 @@ abstract class ContactsEvent {}
 class ContactsLoad extends ContactsEvent {}
 
 class ContactsToggleSelection extends ContactsEvent {
-  final int index;
-  ContactsToggleSelection(this.index);
+  final int? index;
+  final Contact? contact;
+  ContactsToggleSelection({this.index, this.contact}) : assert(index != null || contact != null);
 }

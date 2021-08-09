@@ -6,6 +6,7 @@ import 'package:app_settings/app_settings.dart';
 
 import 'package:tec_pass/helpers/sms.dart';
 import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
+import 'package:tec_pass/views/visits/tabs/contacts/search.dart';
 import 'package:tec_pass/widgets/contact_widget.dart';
 
 class ContactsPage extends StatelessWidget {
@@ -41,19 +42,50 @@ class _LoadedContactsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController scrollController = ScrollController();
     return Scaffold(
-      body: ListView.builder(
-        itemCount: state.allContacts.length,
-        itemBuilder: (BuildContext context, int index) {
-          return FadeIn(
-            duration: Duration(milliseconds: 300),
-            child: ContactWidget(
-              state.allContacts[index],
-              state.selectedContacts.contains(state.allContacts[index]),
-              onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(index)),
+      body: Scrollbar(
+        controller: scrollController,
+        interactive: true,
+        hoverThickness: 30,
+        child: ListView(
+          controller: scrollController,
+          children: [
+            ListTile(
+              title: Text('Buscar contacto'),
+              trailing: Icon(Icons.search),
+              onTap: () {
+                showSearch(context: context, delegate: ContactSearch());
+              },
             ),
-          );
-        },
+            ...List.generate(
+              state.selectedContacts.length,
+              (int index) {
+                return FadeIn(
+                  duration: Duration(milliseconds: 200),
+                  child: ContactWidget(
+                    state.selectedContacts[index],
+                    state.selectedContacts.contains(state.selectedContacts[index]),
+                    onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(contact: state.selectedContacts[index])),
+                  ),
+                );
+              },
+            ).toList(),
+            ...List.generate(
+              state.unselectedContacts.length,
+              (int index) {
+                return FadeIn(
+                  duration: Duration(milliseconds: 200),
+                  child: ContactWidget(
+                    state.unselectedContacts[index],
+                    state.selectedContacts.contains(state.unselectedContacts[index]),
+                    onChanged: (_) => context.read<ContactsBloc>().add(ContactsToggleSelection(contact: state.unselectedContacts[index])),
+                  ),
+                );
+              },
+            ).toList(),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => sendSMStoContacts(context.read<ContactsBloc>().state),
