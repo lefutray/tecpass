@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
@@ -37,40 +38,98 @@ class ContactsPage extends StatelessWidget {
   }
 }
 
-class _LoadedContactsWidget extends StatelessWidget {
+class _LoadedContactsWidget extends StatefulWidget {
   const _LoadedContactsWidget(this.state, {Key? key}) : super(key: key);
   final ContactsLoaded state;
 
   @override
+  __LoadedContactsWidgetState createState() => __LoadedContactsWidgetState();
+}
+
+class __LoadedContactsWidgetState extends State<_LoadedContactsWidget> with SingleTickerProviderStateMixin {
+  late AnimationController _fabVisibility;
+  late final ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _fabVisibility = AnimationController(vsync: this, duration: Duration(milliseconds: 150));
+    _fabVisibility.value = 1;
+    scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _fabVisibility.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final ScrollController scrollController = ScrollController();
-    return Scaffold(
-      body: Scrollbar(
-        controller: scrollController,
-        interactive: true,
-        hoverThickness: 30,
-        child: ListView(
+    bool _handleScrollNotification(ScrollNotification notification) {
+      if (notification.depth == 0) {
+        if (notification is UserScrollNotification) {
+          final UserScrollNotification userScroll = notification;
+          switch (userScroll.direction) {
+            case ScrollDirection.forward:
+              if (userScroll.metrics.maxScrollExtent != userScroll.metrics.minScrollExtent) {
+                _fabVisibility.forward();
+              }
+              break;
+            case ScrollDirection.reverse:
+              if (userScroll.metrics.maxScrollExtent != userScroll.metrics.minScrollExtent) {
+                _fabVisibility.reverse();
+              }
+              break;
+            case ScrollDirection.idle:
+              break;
+          }
+        }
+      }
+      return false;
+    }
+
+    return NotificationListener<ScrollNotification>(
+      onNotification: _handleScrollNotification,
+      child: Scaffold(
+        body: Scrollbar(
           controller: scrollController,
-          children: [
-            searchContact(context),
-            ...contactsList(context, state.selectedContacts),
-            ...contactsList(context, state.unselectedContacts),
-          ],
+          interactive: true,
+          hoverThickness: 30,
+          child: ListView(
+            controller: scrollController,
+            children: [
+              searchContact(context),
+              ...contactsList(context, widget.state.selectedContacts),
+              ...contactsList(context, widget.state.unselectedContacts),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => sendSMStoContacts(context.read<ContactsBloc>().state),
-        child: Icon(Icons.send),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FadeTransition(
+          opacity: _fabVisibility,
+          child: FloatingActionButton.extended(
+            backgroundColor: Colors.white,
+            onPressed: () => sendSMStoContacts(context.read<ContactsBloc>().state),
+            label: Row(
+              children: [
+                Icon(Icons.add_circle_outline, color: Colors.blue),
+                Text('  Enviar invitación', style: TextStyle(color: Colors.blue)),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 
   Widget searchContact(BuildContext context) {
     return ListTile(
-      title: Text('Buscar contacto'),
-      trailing: Icon(Icons.search),
-      onTap: () {
-        showSearch(context: context, delegate: ContactSearch());
+      title: Text('Buscar contacto', style: TextStyle(color: Colors.white)),
+      trailing: Icon(Icons.search, color: Colors.white),
+      onTap: () async {
+        await showSearch(context: context, delegate: ContactSearch());
       },
     );
   }

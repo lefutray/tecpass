@@ -44,7 +44,6 @@ class App {
         );
     }
   }
-
 }
 
 class _Theme {
@@ -81,7 +80,10 @@ class _Theme {
   ThemeData get darkTheme => _darkTheme;
 
   final _lightTheme = ThemeData.light().copyWith(
-    appBarTheme: AppBarTheme(backgroundColor: Color(0xFF1767a4), centerTitle: true),
+    appBarTheme: AppBarTheme(
+      backgroundColor: Color(0xFF1767a4),
+      centerTitle: true,
+    ),
     primaryColor: Color(0xFF1767a4),
     scaffoldBackgroundColor: Color(0xFF1767a4),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -90,6 +92,8 @@ class _Theme {
       unselectedItemColor: Color(0xFFA2C2DB),
       elevation: 15,
     ),
+    primaryColorLight: Color(0xFF000000),
+    primaryColorDark: Color(0xFF000000),
   );
 
   final _darkTheme = ThemeData.dark().copyWith(
