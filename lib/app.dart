@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:tec_pass/views/home.dart';
 
 class App {
@@ -9,6 +10,7 @@ class App {
 
   late final SharedPreferences _preferences;
   late final _Theme theme;
+  late final _ShowcaseSettings showcaseSettings;
 
   factory App() {
     return _instance;
@@ -17,6 +19,7 @@ class App {
   Future<void> initialize() async {
     _preferences = await SharedPreferences.getInstance();
     theme = _Theme(this._preferences);
+    showcaseSettings = _ShowcaseSettings(this._preferences);
   }
 
   void cacheImages(BuildContext context) async {
@@ -79,6 +82,7 @@ class _Theme {
   ThemeData get lightTheme => _lightTheme;
   ThemeData get darkTheme => _darkTheme;
 
+  // themes:
   final _lightTheme = ThemeData.light().copyWith(
     appBarTheme: AppBarTheme(
       backgroundColor: Color(0xFF1767a4),
@@ -103,4 +107,30 @@ class _Theme {
       elevation: 15,
     ),
   );
+}
+
+class _ShowcaseSettings {
+  _ShowcaseSettings(this._preferences);
+
+  void initialize(BuildContext context, List<GlobalKey<State<StatefulWidget>>> keys) {
+    if (showcase) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        ShowCaseWidget.of(context)?.startShowCase(keys);
+      });
+    }
+  }
+
+  bool get showcase {
+    return _preferences.getBool('showcase') ?? true;
+  }
+
+  Future<bool> setShowcase(bool showcase) async {
+    return await _preferences.setBool('showcase', showcase);
+  }
+
+  Future<bool> finish() async {
+    return await _preferences.setBool('showcase', false);
+  }
+
+  final SharedPreferences _preferences;
 }

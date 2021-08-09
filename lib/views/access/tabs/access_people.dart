@@ -13,13 +13,15 @@ class AccessPeopleView extends StatelessWidget {
       PlaceWidget(place: Place('asdas', 'Oficina 510')),
       PlaceWidget(place: Place('asdas', 'Puerta Principal')),
     ];
+    final showcaseWidget = PlaceWidget(place: Place('asdas', 'Puerta Principal'), showcase: true);
     return Scaffold(
       body: ListView.builder(
         itemCount: 20,
         itemBuilder: (BuildContext context, int index) {
           return FadeInLeft(
+            from: 40,
             duration: Duration(milliseconds: 500),
-            child: widgets[index % 3],
+            child: index == 0 ? showcaseWidget : widgets[index % 3],
           );
         },
       ),

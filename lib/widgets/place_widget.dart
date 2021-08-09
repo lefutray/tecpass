@@ -1,34 +1,60 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+
+import 'package:showcaseview/showcaseview.dart';
+
 import 'package:tec_pass/models/place.dart';
+import 'package:tec_pass/widgets/keys_to_be_inherited.dart';
 
 class PlaceWidget extends StatelessWidget {
   const PlaceWidget({
     Key? key,
     required this.place,
     this.size = 45,
+    this.showcase = false,
   }) : super(key: key);
 
   final double size;
   final Place place;
+  final bool showcase;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () => this.place.showDetails(context),
-      contentPadding: EdgeInsets.all(20),
-      title: Text(
-        this.place.name,
-        style: TextStyle(color: Colors.white, fontSize: 20),
-        overflow: TextOverflow.ellipsis,
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _TriangleButton(this.place.enter, size: this.size, color: Colors.green),
-          SizedBox(width: 15),
-          _TriangleButton(this.place.exit, size: this.size, inverted: true),
-        ],
+    final getKeys = KeysToBeInherited.of(context);
+    return _showcaseWidget(context, getKeys);
+  }
+
+  _showcaseWidget(BuildContext context, KeysToBeInherited? keys) {
+    return Showcase(
+      key: showcase ? keys?.placeWidgetKey : GlobalKey(),
+      title: 'Lugar',
+      description: 'Podrás visualizar los lugares a los que puedes acceder aquí.',
+      child: ListTile(
+        onTap: () => this.place.showDetails(context),
+        contentPadding: EdgeInsets.all(20),
+        title: Text(
+          this.place.name,
+          style: TextStyle(color: Colors.white, fontSize: 20),
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Showcase(
+              key: showcase ? keys?.placeWidgetEnterKey : GlobalKey(),
+              title: 'Ingresar',
+              description: 'Este botón te permitirá ingresar al lugar.',
+              child: _TriangleButton(this.place.enter, size: this.size, color: Colors.green),
+            ),
+            SizedBox(width: 15),
+            Showcase(
+              key: showcase ? keys?.placeWidgetExitKey : GlobalKey(),
+              title: 'Salir',
+              description: 'Y este, salir.',
+              child: _TriangleButton(this.place.exit, size: this.size, inverted: true),
+            ),
+          ],
+        ),
       ),
     );
   }
