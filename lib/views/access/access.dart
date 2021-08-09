@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tec_pass/helpers/orientation.dart';
+import 'package:tec_pass/main.dart';
 import 'package:tec_pass/views/access/tabs/access_bikes.dart';
 import 'package:tec_pass/views/access/tabs/access_cars.dart';
 import 'package:tec_pass/views/access/tabs/access_people.dart';
 
 class AccessView extends StatefulWidget {
-  const AccessView({Key? key}) : super(key: key);
+  const AccessView({Key? key, required this.showcase}) : super(key: key);
+  final bool showcase;
 
   @override
   _AccessViewState createState() => _AccessViewState();
@@ -35,6 +37,7 @@ class _AccessViewState extends State<AccessView> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    if (widget.showcase) app.showcaseSettings.startShowcase(context);
     return Scaffold(
       appBar: TabBar(
         controller: tabController,

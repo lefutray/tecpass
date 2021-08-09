@@ -112,10 +112,18 @@ class _Theme {
 class _ShowcaseSettings {
   _ShowcaseSettings(this._preferences);
 
-  void initialize(BuildContext context, List<GlobalKey<State<StatefulWidget>>> keys) {
+  void initialize(BuildContext context) {
     if (showcase) {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
-        ShowCaseWidget.of(context)?.startShowCase(keys);
+        ShowCaseWidget.of(context)?.startShowCase([
+          accessTabKey,
+          placeWidgetKey,
+          placeWidgetEnterKey,
+          placeWidgetExitKey,
+          visitsTabKey,
+          profileTabKey,
+          themeSwitcherKey,
+        ]);
       });
     }
   }
@@ -132,5 +140,27 @@ class _ShowcaseSettings {
     return await _preferences.setBool('showcase', false);
   }
 
+  startShowcase(BuildContext context) async {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      ShowCaseWidget.of(context)?.startShowCase([
+        accessTabKey,
+        placeWidgetKey,
+        placeWidgetEnterKey,
+        placeWidgetExitKey,
+        visitsTabKey,
+        profileTabKey,
+        themeSwitcherKey,
+      ]);
+    });
+  }
+
   final SharedPreferences _preferences;
+
+  final accessTabKey = GlobalKey();
+  final placeWidgetKey = GlobalKey();
+  final placeWidgetEnterKey = GlobalKey();
+  final placeWidgetExitKey = GlobalKey();
+  final visitsTabKey = GlobalKey();
+  final profileTabKey = GlobalKey();
+  final themeSwitcherKey = GlobalKey();
 }

@@ -16,8 +16,10 @@ class CustomNavBarBloc extends Bloc<CustomNavBarEvent, CustomNavBarState> {
       yield VisitsState();
     } else if (event is Profile) {
       yield ProfileState();
-    } else {
+    } else if (event is Access) {
       yield AccessState();
+    } else {
+      yield AccessState(showcase: true);
     }
   }
 }

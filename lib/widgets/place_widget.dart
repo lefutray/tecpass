@@ -2,9 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:showcaseview/showcaseview.dart';
+import 'package:tec_pass/main.dart';
 
 import 'package:tec_pass/models/place.dart';
-import 'package:tec_pass/widgets/keys_to_be_inherited.dart';
 
 class PlaceWidget extends StatelessWidget {
   const PlaceWidget({
@@ -20,13 +20,12 @@ class PlaceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final getKeys = KeysToBeInherited.of(context);
-    return _showcaseWidget(context, getKeys);
+    return _showcaseWidget(context);
   }
 
-  _showcaseWidget(BuildContext context, KeysToBeInherited? keys) {
+  _showcaseWidget(BuildContext context) {
     return Showcase(
-      key: showcase ? keys?.placeWidgetKey : GlobalKey(),
+      key: showcase ? app.showcaseSettings.placeWidgetKey : GlobalKey(),
       title: 'Lugar',
       description: 'Podrás visualizar los lugares a los que puedes acceder aquí.',
       child: ListTile(
@@ -41,14 +40,14 @@ class PlaceWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Showcase(
-              key: showcase ? keys?.placeWidgetEnterKey : GlobalKey(),
+              key: showcase ? app.showcaseSettings.placeWidgetEnterKey : GlobalKey(),
               title: 'Ingresar',
               description: 'Este botón te permitirá ingresar al lugar.',
               child: _TriangleButton(this.place.enter, size: this.size, color: Colors.green),
             ),
             SizedBox(width: 15),
             Showcase(
-              key: showcase ? keys?.placeWidgetExitKey : GlobalKey(),
+              key: showcase ? app.showcaseSettings.placeWidgetExitKey : GlobalKey(),
               title: 'Salir',
               description: 'Y este, salir.',
               child: _TriangleButton(this.place.exit, size: this.size, inverted: true),

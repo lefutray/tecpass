@@ -7,7 +7,6 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 import 'package:tec_pass/main.dart';
-import 'package:tec_pass/widgets/keys_to_be_inherited.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -69,7 +68,7 @@ class __ThemeSwitchingIconButtonState extends State<_ThemeSwitchingIconButton> w
         return Container(
           margin: EdgeInsets.only(right: 5),
           child: Showcase(
-            key: KeysToBeInherited.of(context)?.themeSwitcherKey,
+            key: app.showcaseSettings.themeSwitcherKey,
             description: 'Con este botón podrás cambiar el color de la app en cualquier momento!',
             child: IconButton(
               onPressed: () async {

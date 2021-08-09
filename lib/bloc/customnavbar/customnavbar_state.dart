@@ -13,7 +13,8 @@ abstract class CustomNavBarState {
 }
 
 class AccessState extends CustomNavBarState {
-  AccessState() : super(index: 0);
+  AccessState({this.showcase = false}) : super(index: 0);
+  final showcase;
 }
 
 class VisitsState extends CustomNavBarState {
