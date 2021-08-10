@@ -58,7 +58,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
           late final Contact toggle = event.contact;
           if (currentState.selectedContacts.contains(toggle)) {
             final selectedContacts = currentState.selectedContacts..remove(toggle);
-            final unselectedContacts = [...currentState.unselectedContacts, toggle];
+            final unselectedContacts = [toggle, ...currentState.unselectedContacts];
             yield currentState.copyWith(selectedContacts: selectedContacts, unselectedContacts: unselectedContacts);
           } else {
             final selectedContacts = [...currentState.selectedContacts, toggle];
