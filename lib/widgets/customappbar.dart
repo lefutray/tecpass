@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lottie/lottie.dart';
@@ -7,6 +6,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
 import 'package:tec_pass/main.dart';
+import 'package:tec_pass/widgets/feature_overlay.dart';
 
 class AppLogo extends StatelessWidget {
   const AppLogo({Key? key}) : super(key: key);
@@ -80,43 +80,44 @@ class _ThemeSwitchingIconButtonState extends State<ThemeSwitchingIconButton> wit
       builder: (context) {
         return Container(
           margin: EdgeInsets.only(right: 5),
-          child: DescribedFeatureOverlay(
+          child: CustomFeatureOverlay(
             featureId: 'theme_switcher',
-            backgroundColor: Colors.black,
-            backgroundOpacity: 0.7,
             targetColor: Colors.cyan,
-            tapTarget: AbsorbPointer(child: ThemeSwitchingIconButton()),
-            description: Text('Con este botón podrás cambiar el color de la app en cualquier momento!'),
-            child: IconButton(
-              onPressed: () async {
-                final busy = ThemeProvider.instanceOf(context)?.isBusy ?? false;
-                if (!busy) {
-                  if (app.theme.current.brightness == Brightness.dark) {
-                    _controller.reverse();
-                    await app.theme.changeTheme('light');
-                    ThemeSwitcher.of(context)?.changeTheme(theme: app.theme.lightTheme);
-                  } else {
-                    _controller.forward();
-                    await app.theme.changeTheme('dark');
-                    ThemeSwitcher.of(context)?.changeTheme(theme: app.theme.darkTheme);
-                  }
-                }
-              },
-              icon: Transform.rotate(
-                angle: math.pi * 1.2,
-                child: Lottie.asset(
-                  'assets/theme_switch_lottie.json',
-                  onLoaded: (composition) {
-                    _controller.duration = composition.duration;
-                    app.theme.current.brightness == Brightness.dark ? _controller.value = 1 : _controller.value = 0;
-                  },
-                  controller: _controller,
-                ),
-              ),
-            ),
+            description: 'Con este botón podrás cambiar el color de la app en cualquier momento!',
+            child: button(),
           ),
         );
       },
+    );
+  }
+
+  Widget button() {
+    return IconButton(
+      onPressed: () async {
+        final busy = ThemeProvider.instanceOf(context)?.isBusy ?? false;
+        if (!busy) {
+          if (app.theme.current.brightness == Brightness.dark) {
+            _controller.reverse();
+            await app.theme.changeTheme('light');
+            ThemeSwitcher.of(context)?.changeTheme(theme: app.theme.lightTheme);
+          } else {
+            _controller.forward();
+            await app.theme.changeTheme('dark');
+            ThemeSwitcher.of(context)?.changeTheme(theme: app.theme.darkTheme);
+          }
+        }
+      },
+      icon: Transform.rotate(
+        angle: math.pi * 1.2,
+        child: Lottie.asset(
+          'assets/theme_switch_lottie.json',
+          onLoaded: (composition) {
+            _controller.duration = composition.duration;
+            app.theme.current.brightness == Brightness.dark ? _controller.value = 1 : _controller.value = 0;
+          },
+          controller: _controller,
+        ),
+      ),
     );
   }
 }

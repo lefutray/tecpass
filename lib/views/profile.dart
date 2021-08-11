@@ -1,4 +1,8 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
+import 'package:tec_pass/main.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -22,6 +26,15 @@ class ProfileView extends StatelessWidget {
             ),
           ),
           ListTile(title: Text('C-3PO', textAlign: TextAlign.center, style: TextStyle(color: Colors.white))),
+          ListTile(
+            title: Text('Mostrar tutorial', textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+            onTap: () async {
+              await FeatureDiscovery.clearPreferences(context, app.discoveryItems);
+              FeatureDiscovery.discoverFeatures(context, app.discoveryItems);
+              BlocProvider.of<CustomNavBarBloc>(context).add(Access());
+              
+            },
+          ),
         ],
       ),
     );

@@ -51,7 +51,7 @@ class App {
     }
   }
 
-  final discoveryItems = const <String>{
+  final Set<String> discoveryItems = {
     'access_tab',
     'place_widget',
     'place_enter_widget',
@@ -82,17 +82,18 @@ class User {
   User(SharedPreferences preferences) {
     this._preferences = preferences;
     name = preferences.getString('name');
-    email = preferences.getString('email');
+    email = preferences.getString('password'); // TODO: convert password to token
     isSet = name != null;
   }
+
   save({String? email, String? name}) async {
     if (name != null) await _preferences.setString('name', name);
-    if (email != null) await _preferences.setString('email', email);
+    if (email != null) await _preferences.setString('password', email);
   }
 
   logout() async {
     if (name != null) await _preferences.remove('name');
-    if (email != null) await _preferences.remove('email');
+    if (email != null) await _preferences.remove('password');
   }
 }
 

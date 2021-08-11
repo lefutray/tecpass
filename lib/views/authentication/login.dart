@@ -10,22 +10,27 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Center(
-              child: ListView(
-                children: [
-                  SizedBox(height: constraints.maxHeight * 0.1),
-                  Center(child: AppLogo()),
-                  SizedBox(height: constraints.maxHeight * 0.35),
-                  _Options(),
-                ],
-              ),
-            );
-          },
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state.formStatus is SubmissionSuccess) Navigator.of(context).pushReplacementNamed('home');
+      },
+      child: Scaffold(
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Center(
+                child: ListView(
+                  children: [
+                    SizedBox(height: constraints.maxHeight * 0.1),
+                    Center(child: AppLogo()),
+                    SizedBox(height: constraints.maxHeight * 0.35),
+                    _Options(),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -108,22 +113,23 @@ class _Buttons extends StatelessWidget {
             ),
             BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
-                return state.formStatus is FormSubmitting
-                    ? CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState?.validate() ?? false) {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            context.read<LoginBloc>().add(LoginSubmitted(context));
-                          }
-                        },
-                        child: Text('Ingresar'),
-                        style: ElevatedButton.styleFrom(
-                          visualDensity: VisualDensity.comfortable,
-                          side: BorderSide(color: Colors.white70, width: 1),
-                          primary: Theme.of(context).scaffoldBackgroundColor,
-                        ),
-                      );
+                if (state.formStatus is FormSubmitting) {
+                  return CircularProgressIndicator();
+                }
+                return ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      context.read<LoginBloc>().add(LoginSubmitted());
+                    }
+                  },
+                  child: Text('Ingresar'),
+                  style: ElevatedButton.styleFrom(
+                    visualDensity: VisualDensity.comfortable,
+                    side: BorderSide(color: Colors.white70, width: 1),
+                    primary: Theme.of(context).scaffoldBackgroundColor,
+                  ),
+                );
               },
             ),
           ],

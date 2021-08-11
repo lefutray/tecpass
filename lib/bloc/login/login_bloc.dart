@@ -12,7 +12,7 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final API api;
-  LoginBloc({required this.api}) : super(LoginState());
+  LoginBloc(this.api) : super(LoginState());
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
@@ -26,12 +26,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       case LoginSubmitted:
         yield state.copyWith(formStatus: FormSubmitting());
         try {
+          // try to login
           if (await api.login()) {
+            // save the information if it was successful
             app.user.save(name: state.username, email: state.password);
             yield state.copyWith(formStatus: SubmissionSuccess());
-            Navigator.of((event as LoginSubmitted).context).pushReplacementNamed('home');
           }
-        } catch (error) {
+        } catch (error) { // Show the error message if it fails
           yield state.copyWith(formStatus: SubmissionFailure(error as Exception));
         }
         break;

@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tec_pass/models/place.dart';
+import 'package:tec_pass/widgets/feature_overlay.dart';
 
 class PlaceWidget extends StatelessWidget {
   const PlaceWidget({
@@ -18,17 +18,15 @@ class PlaceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return this.showcase
-        ? DescribedFeatureOverlay(
-            featureId: 'place_widget',
-            backgroundColor: Colors.black,
-            backgroundOpacity: 0.7,
-            title: Text('Lugar'),
-            description: Text('Podrás visualizar los lugares a los \nque puedes acceder aquí.'),
-            tapTarget: Icon(Icons.place, color: Colors.black),
-            child: widget(context),
-          )
-        : widget(context);
+    if (this.showcase)
+      return CustomFeatureOverlay(
+        featureId: 'place_widget',
+        title: 'Lugar',
+        description: 'Podrás visualizar los lugares a los \nque puedes acceder aquí.',
+        tapTarget: Icon(Icons.place, color: Colors.black),
+        child: widget(context),
+      );
+    return widget(context);
   }
 
   ListTile widget(BuildContext context) {
@@ -43,23 +41,17 @@ class PlaceWidget extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          DescribedFeatureOverlay(
+          CustomFeatureOverlay(
             featureId: 'place_enter_widget',
-            backgroundColor: Colors.black,
-            backgroundOpacity: 0.7,
-            title: Text('Ingresar'),
-            description: Text('Este botón te permitirá ingresar al lugar.'),
-            tapTarget: AbsorbPointer(child: _TriangleButton(this.place.enter, size: this.size, color: Colors.green)),
+            title: 'Ingresar',
+            description: 'Este botón te permitirá ingresar al lugar.',
             child: _TriangleButton(this.place.enter, size: this.size, color: Colors.green),
           ),
           SizedBox(width: 15),
-          DescribedFeatureOverlay(
+          CustomFeatureOverlay(
             featureId: 'place_exit_widget',
-            backgroundColor: Colors.black,
-            backgroundOpacity: 0.7,
-            title: Text('Salir'),
-            description: Text('Y este, salir.'),
-            tapTarget: AbsorbPointer(child: _TriangleButton(this.place.exit, size: this.size, inverted: true)),
+            title: 'Salir',
+            description: 'Y este, salir.',
             child: _TriangleButton(this.place.exit, size: this.size, inverted: true),
           ),
         ],

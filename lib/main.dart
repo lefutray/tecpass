@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => CustomNavBarBloc()),
         BlocProvider(create: (_) => ContactsBloc()),
-        BlocProvider(create: (_) => LoginBloc(api: app.api)),
+        BlocProvider(create: (_) => LoginBloc(app.api)),
       ],
       child: ThemeProvider(
         initTheme: app.theme.current,
@@ -55,15 +55,10 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
   void initState() {
     app.cacheImages(context);
     SchedulerBinding.instance?.addPostFrameCallback((_) {
+      // show the feature discovery sequence (if it hasn't been already shown)
       FeatureDiscovery.discoverFeatures(context, app.discoveryItems);
     });
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    app.cacheImages(context);
-    super.didChangeDependencies();
   }
 
   @override
