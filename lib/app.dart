@@ -70,6 +70,13 @@ class API {
     return true;
   }
 
+  Future<bool> register() async {
+    print('attempting login');
+    await Future.delayed(Duration(seconds: 2));
+    print('logged in');
+    return true;
+  }
+
   Future<void> logout() async {}
 }
 

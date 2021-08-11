@@ -9,6 +9,7 @@ import 'package:tec_pass/app.dart';
 import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
 import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
 import 'package:tec_pass/bloc/login/login_bloc.dart';
+import 'package:tec_pass/bloc/register/register_bloc.dart';
 
 final app = App();
 
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => CustomNavBarBloc()),
         BlocProvider(create: (_) => ContactsBloc()),
         BlocProvider(create: (_) => LoginBloc(app.api)),
+        BlocProvider(create: (_) => RegisterBloc(app.api)),
       ],
       child: ThemeProvider(
         initTheme: app.theme.current,

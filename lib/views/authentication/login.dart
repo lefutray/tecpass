@@ -71,12 +71,14 @@ class _TextFields extends StatelessWidget {
                   CustomTextField(
                     labelText: 'Usuario',
                     icon: Icons.person,
+                    initialValue: state.username,
                     onChanged: (username) => context.read<LoginBloc>().add(LoginUsernameChanged(username)),
                     validator: state.validUsername,
                   ),
                   CustomTextField(
                     labelText: 'Contraseña',
                     icon: Icons.lock_open_outlined,
+                    initialValue: state.password,
                     autofillHints: [AutofillHints.password],
                     onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
                     validator: state.validPassword,

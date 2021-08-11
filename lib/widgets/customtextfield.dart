@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     required this.labelText,
+    this.initialValue,
     this.hintText,
     this.icon,
     this.autofillHints = const [AutofillHints.username, AutofillHints.email],
@@ -13,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     this.validator,
   });
 
+  final String? initialValue;
   final List<String> autofillHints;
   final String labelText;
   final String? hintText;
@@ -28,6 +30,7 @@ class CustomTextField extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: TextFormField(
+        initialValue: this.initialValue,
         controller: this.controller,
         onChanged: this.onChanged,
         validator: this.validator,

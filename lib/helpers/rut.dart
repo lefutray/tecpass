@@ -29,7 +29,7 @@ class RUTValidator {
 
   ///Obtiene los elementos numéricos que componen
   ///el RUT, excluyendo el digito verificador.
-  static int getRutNumbers(String rutString) => int.parse(_getRUTElements(rutString)[0]);
+  static int? getRutNumbers(String rutString) => int.tryParse(_getRUTElements(rutString)[0]);
 
   ///Obtiene array con los elementos numéricos del RUT (index 0)
   ///y el digito verificador (index 1).
@@ -37,7 +37,8 @@ class RUTValidator {
 
   ///Valida rut en base al cálculo de
   ///su dígito verificador y formato.
-  String? validator(String value) {
+  String? validator(String? value) {
+    if (value == null) return 'RUT no puede ser nulo';
     value = formatFromText(value);
     try {
       this.numbers = getRutNumbers(value);
