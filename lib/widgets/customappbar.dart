@@ -84,14 +84,14 @@ class _ThemeSwitchingIconButtonState extends State<ThemeSwitchingIconButton> wit
             featureId: 'theme_switcher',
             targetColor: Colors.cyan,
             description: 'Con este botón podrás cambiar el color de la app en cualquier momento!',
-            child: button(),
+            child: button(context),
           ),
         );
       },
     );
   }
 
-  Widget button() {
+  Widget button(BuildContext context) {
     return IconButton(
       onPressed: () async {
         final busy = ThemeProvider.instanceOf(context)?.isBusy ?? false;

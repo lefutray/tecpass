@@ -32,13 +32,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => LoginBloc(app.api)),
         BlocProvider(create: (_) => RegisterBloc(app.api)),
       ],
-      child: ThemeProvider(
-        initTheme: app.theme.current,
-        builder: (context, selectedTheme) {
-          return FeatureDiscovery(
-            child: MyMaterialApp(theme: selectedTheme),
-          );
-        },
+      child: FeatureDiscovery(
+        child: ThemeProvider(
+          initTheme: app.theme.current,
+          builder: (context, selectedTheme) => MyMaterialApp(theme: selectedTheme),
+        ),
       ),
     );
   }
@@ -67,7 +65,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: this.widget.theme,
+      theme: ThemeProvider.instanceOf(context)?.theme,
       initialRoute: app.user.isSet ? 'home' : 'login',
       onGenerateRoute: app.routes,
     );
