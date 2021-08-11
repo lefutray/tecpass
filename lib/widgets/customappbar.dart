@@ -1,12 +1,25 @@
 import 'dart:math' as math;
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-import 'package:showcaseview/showcaseview.dart';
 
 import 'package:tec_pass/main.dart';
+
+class AppLogo extends StatelessWidget {
+  const AppLogo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      'assets/Logo-tecpass-s.png',
+      width: 150,
+      fit: BoxFit.contain,
+    );
+  }
+}
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -25,7 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           fit: BoxFit.contain,
         ),
       ),
-      actions: [_ThemeSwitchingIconButton()],
+      actions: [ThemeSwitchingIconButton()],
       elevation: 0,
     );
   }
@@ -34,14 +47,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   get preferredSize => new Size.fromHeight(60);
 }
 
-class _ThemeSwitchingIconButton extends StatefulWidget {
-  const _ThemeSwitchingIconButton({Key? key}) : super(key: key);
+class ThemeSwitchingIconButton extends StatefulWidget {
+  const ThemeSwitchingIconButton({Key? key}) : super(key: key);
 
   @override
-  __ThemeSwitchingIconButtonState createState() => __ThemeSwitchingIconButtonState();
+  _ThemeSwitchingIconButtonState createState() => _ThemeSwitchingIconButtonState();
 }
 
-class __ThemeSwitchingIconButtonState extends State<_ThemeSwitchingIconButton> with SingleTickerProviderStateMixin {
+class _ThemeSwitchingIconButtonState extends State<ThemeSwitchingIconButton> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
   @override
@@ -67,9 +80,13 @@ class __ThemeSwitchingIconButtonState extends State<_ThemeSwitchingIconButton> w
       builder: (context) {
         return Container(
           margin: EdgeInsets.only(right: 5),
-          child: Showcase(
-            key: app.showcaseSettings.themeSwitcherKey,
-            description: 'Con este botón podrás cambiar el color de la app en cualquier momento!',
+          child: DescribedFeatureOverlay(
+            featureId: 'theme_switcher',
+            backgroundColor: Colors.black,
+            backgroundOpacity: 0.7,
+            targetColor: Colors.cyan,
+            tapTarget: AbsorbPointer(child: ThemeSwitchingIconButton()),
+            description: Text('Con este botón podrás cambiar el color de la app en cualquier momento!'),
             child: IconButton(
               onPressed: () async {
                 final busy = ThemeProvider.instanceOf(context)?.isBusy ?? false;

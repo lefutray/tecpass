@@ -1,8 +1,6 @@
 import 'dart:math';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
-
-import 'package:showcaseview/showcaseview.dart';
-import 'package:tec_pass/main.dart';
 
 import 'package:tec_pass/models/place.dart';
 
@@ -20,40 +18,51 @@ class PlaceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _showcaseWidget(context);
+    return this.showcase
+        ? DescribedFeatureOverlay(
+            featureId: 'place_widget',
+            backgroundColor: Colors.black,
+            backgroundOpacity: 0.7,
+            title: Text('Lugar'),
+            description: Text('Podrás visualizar los lugares a los \nque puedes acceder aquí.'),
+            tapTarget: Icon(Icons.place, color: Colors.black),
+            child: widget(context),
+          )
+        : widget(context);
   }
 
-  _showcaseWidget(BuildContext context) {
-    return Showcase(
-      key: showcase ? app.showcaseSettings.placeWidgetKey : GlobalKey(),
-      title: 'Lugar',
-      description: 'Podrás visualizar los lugares a los que puedes acceder aquí.',
-      child: ListTile(
-        onTap: () => this.place.showDetails(context),
-        contentPadding: EdgeInsets.all(20),
-        title: Text(
-          this.place.name,
-          style: TextStyle(color: Colors.white, fontSize: 20),
-          overflow: TextOverflow.ellipsis,
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Showcase(
-              key: showcase ? app.showcaseSettings.placeWidgetEnterKey : GlobalKey(),
-              title: 'Ingresar',
-              description: 'Este botón te permitirá ingresar al lugar.',
-              child: _TriangleButton(this.place.enter, size: this.size, color: Colors.green),
-            ),
-            SizedBox(width: 15),
-            Showcase(
-              key: showcase ? app.showcaseSettings.placeWidgetExitKey : GlobalKey(),
-              title: 'Salir',
-              description: 'Y este, salir.',
-              child: _TriangleButton(this.place.exit, size: this.size, inverted: true),
-            ),
-          ],
-        ),
+  ListTile widget(BuildContext context) {
+    return ListTile(
+      onTap: () => this.place.showDetails(context),
+      contentPadding: EdgeInsets.all(20),
+      title: Text(
+        this.place.name,
+        style: TextStyle(color: Colors.white, fontSize: 20),
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DescribedFeatureOverlay(
+            featureId: 'place_enter_widget',
+            backgroundColor: Colors.black,
+            backgroundOpacity: 0.7,
+            title: Text('Ingresar'),
+            description: Text('Este botón te permitirá ingresar al lugar.'),
+            tapTarget: AbsorbPointer(child: _TriangleButton(this.place.enter, size: this.size, color: Colors.green)),
+            child: _TriangleButton(this.place.enter, size: this.size, color: Colors.green),
+          ),
+          SizedBox(width: 15),
+          DescribedFeatureOverlay(
+            featureId: 'place_exit_widget',
+            backgroundColor: Colors.black,
+            backgroundOpacity: 0.7,
+            title: Text('Salir'),
+            description: Text('Y este, salir.'),
+            tapTarget: AbsorbPointer(child: _TriangleButton(this.place.exit, size: this.size, inverted: true)),
+            child: _TriangleButton(this.place.exit, size: this.size, inverted: true),
+          ),
+        ],
       ),
     );
   }

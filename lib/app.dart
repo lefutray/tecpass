@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcaseview.dart';
+import 'package:tec_pass/views/authentication/login.dart';
+import 'package:tec_pass/views/authentication/register.dart';
 import 'package:tec_pass/views/home.dart';
 
 class App {
@@ -10,7 +11,8 @@ class App {
 
   late final SharedPreferences _preferences;
   late final _Theme theme;
-  late final _ShowcaseSettings showcaseSettings;
+  late final API api;
+  late final User user;
 
   factory App() {
     return _instance;
@@ -19,7 +21,8 @@ class App {
   Future<void> initialize() async {
     _preferences = await SharedPreferences.getInstance();
     theme = _Theme(this._preferences);
-    showcaseSettings = _ShowcaseSettings(this._preferences);
+    user = User(this._preferences);
+    api = API();
   }
 
   void cacheImages(BuildContext context) async {
@@ -38,14 +41,58 @@ class App {
       case 'login':
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => HomePage(),
+          builder: (_) => LoginPage(),
         );
       case 'register':
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => HomePage(),
+          builder: (_) => RegisterPage(),
         );
     }
+  }
+
+  final discoveryItems = const <String>{
+    'access_tab',
+    'place_widget',
+    'place_enter_widget',
+    'place_exit_widget',
+    'visits_tab',
+    'perfil_tab',
+    'theme_switcher',
+  };
+}
+
+class API {
+  Future<bool> login() async {
+    print('attempting login');
+    await Future.delayed(Duration(seconds: 2));
+    print('logged in');
+    return true;
+  }
+
+  Future<void> logout() async {}
+}
+
+class User {
+  late final String? name;
+  late final String? email;
+  late final bool isSet;
+  late final SharedPreferences _preferences;
+
+  User(SharedPreferences preferences) {
+    this._preferences = preferences;
+    name = preferences.getString('name');
+    email = preferences.getString('email');
+    isSet = name != null;
+  }
+  save({String? email, String? name}) async {
+    if (name != null) await _preferences.setString('name', name);
+    if (email != null) await _preferences.setString('email', email);
+  }
+
+  logout() async {
+    if (name != null) await _preferences.remove('name');
+    if (email != null) await _preferences.remove('email');
   }
 }
 
@@ -107,60 +154,4 @@ class _Theme {
       elevation: 15,
     ),
   );
-}
-
-class _ShowcaseSettings {
-  _ShowcaseSettings(this._preferences);
-
-  void initialize(BuildContext context) {
-    if (showcase) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
-        ShowCaseWidget.of(context)?.startShowCase([
-          accessTabKey,
-          placeWidgetKey,
-          placeWidgetEnterKey,
-          placeWidgetExitKey,
-          visitsTabKey,
-          profileTabKey,
-          themeSwitcherKey,
-        ]);
-      });
-    }
-  }
-
-  bool get showcase {
-    return _preferences.getBool('showcase') ?? true;
-  }
-
-  Future<bool> setShowcase(bool showcase) async {
-    return await _preferences.setBool('showcase', showcase);
-  }
-
-  Future<bool> finish() async {
-    return await _preferences.setBool('showcase', false);
-  }
-
-  startShowcase(BuildContext context) async {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      ShowCaseWidget.of(context)?.startShowCase([
-        accessTabKey,
-        placeWidgetKey,
-        placeWidgetEnterKey,
-        placeWidgetExitKey,
-        visitsTabKey,
-        profileTabKey,
-        themeSwitcherKey,
-      ]);
-    });
-  }
-
-  final SharedPreferences _preferences;
-
-  final accessTabKey = GlobalKey();
-  final placeWidgetKey = GlobalKey();
-  final placeWidgetEnterKey = GlobalKey();
-  final placeWidgetExitKey = GlobalKey();
-  final visitsTabKey = GlobalKey();
-  final profileTabKey = GlobalKey();
-  final themeSwitcherKey = GlobalKey();
 }
