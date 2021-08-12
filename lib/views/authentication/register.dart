@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:tec_pass/bloc/register/register_bloc.dart';
-import 'package:tec_pass/helpers/rut.dart';
+import 'package:tec_pass/helpers/helpers.dart';
 import 'package:tec_pass/widgets/customappbar.dart';
 import 'package:tec_pass/widgets/customtextfield.dart';
 

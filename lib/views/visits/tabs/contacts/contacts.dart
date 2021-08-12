@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 
-import 'package:tec_pass/helpers/sms.dart';
+import 'package:tec_pass/helpers/helpers.dart';
 import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
 import 'package:tec_pass/views/visits/tabs/contacts/search.dart';
 import 'package:tec_pass/widgets/contact_widget.dart';

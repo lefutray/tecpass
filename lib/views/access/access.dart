@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tec_pass/helpers/orientation.dart';
+
+import 'package:tec_pass/helpers/helpers.dart';
 import 'package:tec_pass/views/access/tabs/access_bikes.dart';
 import 'package:tec_pass/views/access/tabs/access_cars.dart';
 import 'package:tec_pass/views/access/tabs/access_people.dart';

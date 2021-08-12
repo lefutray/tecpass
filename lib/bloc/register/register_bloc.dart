@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:fzregex/fzregex.dart';
 import 'package:fzregex/utils/pattern.dart';
 import 'package:meta/meta.dart';
+
 import 'package:tec_pass/app.dart';
-import 'package:tec_pass/helpers/rut.dart';
+import 'package:tec_pass/helpers/helpers.dart';
 import 'package:tec_pass/main.dart';
 import 'package:tec_pass/models/form_submission_status.dart';
 
