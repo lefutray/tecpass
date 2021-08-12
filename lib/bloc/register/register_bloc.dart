@@ -45,7 +45,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           // try to Register
           if (await api.register()) {
             // save the information if it was successful
-            app.user.save(name: state.fullName, email: state.password);
+            app.user.save(email: state.email, password: state.password);
             yield state.copyWith(formStatus: SubmissionSuccess());
           }
         } catch (error) {

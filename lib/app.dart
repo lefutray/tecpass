@@ -77,30 +77,35 @@ class API {
     return true;
   }
 
-  Future<void> logout() async {}
+  Future<bool> logout() async {
+    print('attempting logout');
+    await Future.delayed(Duration(seconds: 2));
+    print('logged out');
+    return true;
+  }
 }
 
 class User {
-  late final String? name;
   late final String? email;
+  late final String? password;
   late final bool isSet;
   late final SharedPreferences _preferences;
 
   User(SharedPreferences preferences) {
     this._preferences = preferences;
-    name = preferences.getString('name');
-    email = preferences.getString('password'); // TODO: convert password to token
-    isSet = name != null;
+    email = preferences.getString('email');
+    password = preferences.getString('password'); // TODO: convert password to token
+    isSet = email != null;
   }
 
-  save({String? email, String? name}) async {
-    if (name != null) await _preferences.setString('name', name);
-    if (email != null) await _preferences.setString('password', email);
+  save({String? password, String? email}) async {
+    if (email != null) await _preferences.setString('email', email);
+    if (password != null) await _preferences.setString('password', password);
   }
 
   logout() async {
-    if (name != null) await _preferences.remove('name');
-    if (email != null) await _preferences.remove('password');
+    if (email != null) await _preferences.remove('email');
+    if (password != null) await _preferences.remove('password');
   }
 }
 

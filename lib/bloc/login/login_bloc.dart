@@ -17,8 +17,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     switch (event.runtimeType) {
-      case LoginUsernameChanged:
-        yield state.copyWith(username: (event as LoginUsernameChanged).username);
+      case LoginEmailChanged:
+        yield state.copyWith(email: (event as LoginEmailChanged).email);
         break;
       case LoginPasswordChanged:
         yield state.copyWith(password: (event as LoginPasswordChanged).password);
@@ -29,7 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           // try to login
           if (await api.login()) {
             // save the information if it was successful
-            app.user.save(name: state.username, email: state.password);
+            app.user.save(email: state.email, password: state.password);
             yield state.copyWith(formStatus: SubmissionSuccess());
           }
         } catch (error) { // Show the error message if it fails

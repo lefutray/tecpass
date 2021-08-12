@@ -69,11 +69,11 @@ class _TextFields extends StatelessWidget {
               child: Column(
                 children: [
                   CustomTextField(
-                    labelText: 'Usuario',
-                    icon: Icons.person,
-                    initialValue: state.username,
-                    onChanged: (username) => context.read<LoginBloc>().add(LoginUsernameChanged(username)),
-                    validator: state.validUsername,
+                    labelText: 'Correo Electrónico',
+                    icon: Icons.alternate_email,
+                    initialValue: state.email,
+                    onChanged: (username) => context.read<LoginBloc>().add(LoginEmailChanged(username)),
+                    validator: state.validEmail,
                   ),
                   CustomTextField(
                     labelText: 'Contraseña',
