@@ -42,7 +42,8 @@ class ContactSearch extends SearchDelegate<Contact?> {
     return BlocBuilder<ContactsBloc, ContactsState>(
       builder: (context, state) {
         state as ContactsLoaded;
-        List<Contact> suggestions = state.allContacts.where(resultMatches).toList();
+        List<Contact> suggestions = state.selectedContacts.where(resultMatches).toList();
+        suggestions.addAll(state.unselectedContacts.where(resultMatches).toList());
         if (query.isEmpty) {
           return ListView.builder(
             itemCount: 1,

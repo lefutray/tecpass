@@ -10,7 +10,7 @@ part 'contacts_state.dart';
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   ContactsBloc() : super(ContactsInitial());
 
-  Future<List<Contact>> _contacts() async {
+  Future<List<Contact>> _getContacts() async {
     return await FlutterContacts.getContacts(
       withProperties: true,
       withPhoto: true,
@@ -25,20 +25,21 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       case ContactsLoad:
         // if we don't have permission, we should show the permission prompt
         if (await FlutterContacts.requestPermission()) {
-          final contacts = await _contacts();
+          final contacts = await _getContacts();
           if (contacts.isEmpty)
             yield ContactsPermissionDenied();
           else
-            yield ContactsLoaded(allContacts: contacts, unselectedContacts: contacts);
+            yield ContactsLoaded(unselectedContacts: contacts);
         } else {
           final status = await Permission.contacts.request();
           switch (status) {
             case PermissionStatus.granted:
-              final contacts = await _contacts();
-              if (contacts.isEmpty)
+              final contacts = await _getContacts();
+              if (contacts.isEmpty) {
                 yield ContactsPermissionDenied();
-              else
-                yield ContactsLoaded(allContacts: contacts);
+              } else {
+                yield ContactsLoaded(unselectedContacts: contacts);
+              }
               break;
             case PermissionStatus.denied:
               yield ContactsPermissionDenied();
@@ -54,17 +55,14 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       case ContactsToggleSelection:
         final currentState = state as ContactsLoaded;
         event as ContactsToggleSelection;
-        if (currentState.allContacts.isNotEmpty) {
-          late final Contact toggle = event.contact;
-          if (currentState.selectedContacts.contains(toggle)) {
-            final selectedContacts = currentState.selectedContacts..remove(toggle);
-            final unselectedContacts = [toggle, ...currentState.unselectedContacts];
-            yield currentState.copyWith(selectedContacts: selectedContacts, unselectedContacts: unselectedContacts);
-          } else {
-            final selectedContacts = [...currentState.selectedContacts, toggle];
-            final unselectedContacts = currentState.unselectedContacts..remove(toggle);
-            yield currentState.copyWith(selectedContacts: selectedContacts, unselectedContacts: unselectedContacts);
-          }
+        if (currentState.selectedContacts.contains(event.contact)) {
+          final selectedContacts = currentState.selectedContacts..remove(event.contact);
+          final unselectedContacts = [event.contact, ...currentState.unselectedContacts];
+          yield currentState.copyWith(selectedContacts: selectedContacts, unselectedContacts: unselectedContacts);
+        } else {
+          final selectedContacts = [...currentState.selectedContacts, event.contact];
+          final unselectedContacts = currentState.unselectedContacts..remove(event.contact);
+          yield currentState.copyWith(selectedContacts: selectedContacts, unselectedContacts: unselectedContacts);
         }
         break;
       default:
