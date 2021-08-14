@@ -17,19 +17,20 @@ class LoginPage extends StatelessWidget {
       child: Scaffold(
         body: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Center(
-                child: ListView(
-                  children: [
-                    SizedBox(height: constraints.maxHeight * 0.1),
-                    Center(child: AppLogo()),
-                    SizedBox(height: constraints.maxHeight * 0.35),
-                    _Options(),
-                  ],
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment(0.0, -0.7),
+                child: AppLogo(),
+              ),
+              Align(
+                alignment: Alignment(0.0, 0.7),
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: _Options(),
                 ),
-              );
-            },
+              ),
+            ],
           ),
         ),
       ),
@@ -109,9 +110,7 @@ class _Buttons extends StatelessWidget {
             TextButton(
               onPressed: () => Navigator.of(context).pushReplacementNamed('register'),
               child: Text('Registrarme', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w300)),
-              style: TextButton.styleFrom(
-                primary: Theme.of(context).scaffoldBackgroundColor,
-              ),
+              style: TextButton.styleFrom(primary: Theme.of(context).scaffoldBackgroundColor),
             ),
             BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {

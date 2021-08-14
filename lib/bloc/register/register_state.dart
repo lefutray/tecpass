@@ -19,9 +19,15 @@ class RegisterState {
   }
 
   String? validatePassword(String? value) {
-    if (password.length > 8 && password == passwordConfirmation) return null;
-    if (password != passwordConfirmation || password.length < 8) return 'Las contraseñas no coinciden';
-    return 'La contraseña debe tener más de 8 caracteres';
+    String errors = '';
+    if (!RegExp(r'[A-Z]').hasMatch(password)) errors += '· 1 Mayúscula\n';
+    if (!RegExp(r'[a-z]').hasMatch(password)) errors += '· 1 Minúscula\n';
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) errors += '· 1 Caracter especial\n';
+    if (password.characters.length <= 8) errors += '· La contraseña debe tener más de 8 caracteres\n';
+    if (password != passwordConfirmation) errors += '· Las contraseñas no coinciden\n';
+
+    if (errors.isEmpty) return null;
+    return errors;
   }
 
   String? validateRUT(String? value) {

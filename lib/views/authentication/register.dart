@@ -21,6 +21,7 @@ class RegisterPage extends StatelessWidget {
           builder: (context, constraints) {
             return Center(
               child: ListView(
+                physics: BouncingScrollPhysics(),
                 children: [
                   SizedBox(height: constraints.maxHeight * 0.05),
                   Center(child: AppLogo()),
@@ -49,13 +50,6 @@ class __TextFieldsState extends State<_TextFields> {
   void initState() {
     super.initState();
     _rutController = TextEditingController(text: BlocProvider.of<RegisterBloc>(context).state.rut);
-  }
-
-  @override
-  void dispose() {
-    BlocProvider.of<RegisterBloc>(context).add(RegisterPasswordChanged(''));
-    BlocProvider.of<RegisterBloc>(context).add(RegisterPasswordConfirmationChanged(''));
-    super.dispose();
   }
 
   @override
@@ -167,11 +161,13 @@ class _Options extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () => Navigator.of(context).pushReplacementNamed('login'),
+                onPressed: () {
+                  BlocProvider.of<RegisterBloc>(context).add(RegisterPasswordChanged(''));
+                  BlocProvider.of<RegisterBloc>(context).add(RegisterPasswordConfirmationChanged(''));
+                  Navigator.of(context).pushReplacementNamed('login');
+                },
                 child: Text('¿Ya tienes una cuenta? Ingresa.', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w300)),
-                style: TextButton.styleFrom(
-                  primary: Theme.of(context).scaffoldBackgroundColor,
-                ),
+                style: TextButton.styleFrom(primary: Theme.of(context).scaffoldBackgroundColor),
               ),
             ],
           );
