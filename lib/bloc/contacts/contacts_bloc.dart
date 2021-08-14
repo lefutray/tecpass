@@ -26,10 +26,11 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         // if we don't have permission, we should show the permission prompt
         if (await FlutterContacts.requestPermission()) {
           final contacts = await _getContacts();
-          if (contacts.isEmpty)
+          if (contacts.isEmpty) {
             yield ContactsPermissionDenied();
-          else
+          } else {
             yield ContactsLoaded(unselectedContacts: contacts);
+          }
         } else {
           final status = await Permission.contacts.request();
           switch (status) {

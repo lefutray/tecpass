@@ -20,10 +20,11 @@ class _AccessViewState extends State<AccessView> with SingleTickerProviderStateM
   void initState() {
     tabController = TabController(length: 3, vsync: this);
     tabController.addListener(() {
-      if (!tabController.indexIsChanging && tabController.index != 0)
+      if (!tabController.indexIsChanging && tabController.index != 0) {
         portraitOnly();
-      else
+      } else {
         allOrientations();
+      }
     });
     super.initState();
   }

@@ -51,14 +51,14 @@ class Place {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        await this.enter();
+                        await enter();
                         Navigator.pop(context);
                       },
                       child: Text('Entrar'),
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        await this.exit();
+                        await exit();
                         Navigator.pop(context);
                       },
                       child: Text('Salir'),

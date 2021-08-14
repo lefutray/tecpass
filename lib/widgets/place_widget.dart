@@ -18,7 +18,7 @@ class PlaceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (this.showcase)
+    if (showcase) {
       return CustomFeatureOverlay(
         featureId: 'place_widget',
         title: 'Lugar',
@@ -26,15 +26,16 @@ class PlaceWidget extends StatelessWidget {
         tapTarget: Icon(Icons.place, color: Colors.black),
         child: widget(context),
       );
+    }
     return widget(context);
   }
 
   ListTile widget(BuildContext context) {
     return ListTile(
-      onTap: () => this.place.showDetails(context),
+      onTap: () => place.showDetails(context),
       contentPadding: EdgeInsets.all(20),
       title: Text(
-        this.place.name,
+        place.name,
         style: TextStyle(color: Colors.white, fontSize: 20),
         overflow: TextOverflow.ellipsis,
       ),
@@ -45,14 +46,14 @@ class PlaceWidget extends StatelessWidget {
             featureId: 'place_enter_widget',
             title: 'Ingresar',
             description: 'Este botón te permitirá ingresar al lugar.',
-            child: _TriangleButton(this.place.enter, size: this.size, color: Colors.green),
+            child: _TriangleButton(place.enter, size: size, color: Colors.green),
           ),
           SizedBox(width: 15),
           CustomFeatureOverlay(
             featureId: 'place_exit_widget',
             title: 'Salir',
             description: 'Y este, salir.',
-            child: _TriangleButton(this.place.exit, size: this.size, inverted: true),
+            child: _TriangleButton(place.exit, size: size, inverted: true),
           ),
         ],
       ),

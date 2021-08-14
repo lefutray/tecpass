@@ -12,21 +12,21 @@ class ContactWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CheckboxListTile(
       title: Text(
-        '${contact.displayName}',
+        contact.displayName,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: this.isSelected ? Colors.white : Colors.white70),
+        style: TextStyle(color: isSelected ? Colors.white : Colors.white70),
       ),
       secondary: _Avatar(contact: contact),
       subtitle: Text(
         contact.phones.isEmpty ? 'Sin número' : contact.phones.first.number,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: this.isSelected ? Colors.white : Colors.white70),
+        style: TextStyle(color: isSelected ? Colors.white : Colors.white70),
       ),
       activeColor: Colors.white,
       checkColor: Colors.black,
-      onChanged: this.onChanged,
-      selected: this.isSelected,
-      value: this.isSelected,
+      onChanged: onChanged,
+      selected: isSelected,
+      value: isSelected,
     );
   }
 }

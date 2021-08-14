@@ -26,12 +26,8 @@ class ContactsPage extends StatelessWidget {
             return _LoadedContactsWidget(state as ContactsLoaded);
           case ContactsNotFound:
             return _NoContacts(state);
-          case ContactsPermissionDenied:
-            return _PermissionDenied(state);
-          case ContactsPermissionDeniedPermanently:
-            return _PermissionDenied(state);
           default:
-            return Center(child: Text('The State ${state.runtimeType} was not recognized.'));
+            return _PermissionDenied(state);
         }
       },
     );

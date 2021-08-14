@@ -48,18 +48,18 @@ class RUTValidator {
   String? validationErrorText;
 
   RUTValidator({this.numbers, this.dv, this.validationErrorText}) {
-    this.numbers ??= 0;
-    this.dv = dv?.toUpperCase() ?? '';
-    this.validationErrorText ??= 'RUT no válido.';
+    numbers ??= 0;
+    dv = dv?.toUpperCase() ?? '';
+    validationErrorText ??= 'RUT no válido.';
   }
 
   ///Retorna el valor del digito verificador [String]
   ///en base a los números que componen la cadena de
   ///Strings mediante el calculo Mod 11.
-  String get digitoVerificado => _RUTValidatorUtils._calcMod11(this.numbers);
+  String get digitoVerificado => _RUTValidatorUtils._calcMod11(numbers);
 
   ///Retorna la validez de un rut de entrada
-  bool get isValid => (_RUTValidatorUtils._calcMod11(this.numbers) == this.dv);
+  bool get isValid => (_RUTValidatorUtils._calcMod11(numbers) == dv);
 
   ///Obtiene dígito verificador a partir de un RUT con formato de
   ///puntos y guiones.
@@ -82,14 +82,14 @@ class RUTValidator {
     if (value == null) return 'RUT no puede ser nulo';
     value = formatFromText(value);
     try {
-      this.numbers = getRutNumbers(value);
-      this.dv = getRutDV(value);
+      numbers = getRutNumbers(value);
+      dv = getRutDV(value);
     } catch (e) {
       print('RUT Validation Error: $e');
-      return this.validationErrorText;
+      return validationErrorText;
     }
 
-    return (value.isEmpty || value.length <= 10 || this.numbers! < 1000000 || !this.isValid) ? this.validationErrorText : null;
+    return (value.isEmpty || value.length <= 10 || numbers! < 1000000 || !isValid) ? validationErrorText : null;
   }
 
 //----------------------------------------

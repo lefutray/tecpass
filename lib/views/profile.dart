@@ -27,12 +27,36 @@ class ProfileView extends StatelessWidget {
           ),
           ListTile(title: Text('C-3PO', textAlign: TextAlign.center, style: TextStyle(color: Colors.white))),
           ListTile(
-            title: Text('Mostrar tutorial', textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+            title: Text('Mostrar tutorial', style: TextStyle(color: Colors.white)),
+            trailing: Icon(Icons.lightbulb),
             onTap: () async {
               await FeatureDiscovery.clearPreferences(context, app.discoveryItems);
               FeatureDiscovery.discoverFeatures(context, app.discoveryItems);
               BlocProvider.of<CustomNavBarBloc>(context).add(Access());
-              
+            },
+          ),
+          ListTile(
+            title: Text('Cerrar sesión', style: TextStyle(color: Colors.white)),
+            trailing: Icon(Icons.logout),
+            onTap: () async {
+              await showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  content: Text('¿Estás seguro de que quieres cerrar la sesión?'),
+                  actions: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('NO'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await app.logout(context);
+                      },
+                      child: Text('SÍ'),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         ],

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:tec_pass/app.dart';
 import 'package:tec_pass/main.dart';
-import 'package:tec_pass/models/form_submission_status.dart';
+import 'package:tec_pass/bloc/form_submission_status.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -27,12 +27,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.copyWith(formStatus: FormSubmitting());
         try {
           // try to login
-          if (await api.login()) {
-            // save the information if it was successful
-            app.user.save(email: state.email, password: state.password);
-            yield state.copyWith(formStatus: SubmissionSuccess());
+          if (await app.login(email: state.email, password: state.password)) {
+            yield LoginState(formStatus: SubmissionSuccess());
           }
-        } catch (error) { // Show the error message if it fails
+        } catch (error) {
+          // Show the error message if it fails
           yield state.copyWith(formStatus: SubmissionFailure(error as Exception));
         }
         break;

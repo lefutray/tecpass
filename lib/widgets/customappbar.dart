@@ -44,7 +44,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  get preferredSize => new Size.fromHeight(60);
+  get preferredSize => Size.fromHeight(60);
 }
 
 class ThemeSwitchingIconButton extends StatefulWidget {

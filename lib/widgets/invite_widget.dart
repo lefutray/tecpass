@@ -10,8 +10,8 @@ class InviteWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late final color;
-    late final inviteTitle;
+    late final Color color;
+    late final String inviteTitle;
     List<Widget> buttons = [];
     switch (invite.status) {
       case InviteStatus.accepted:
@@ -70,7 +70,7 @@ class InviteWidget extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(10, 15, 0, 0),
                   child: Text(
-                    '${this.invite.place.name} - Para ${this.invite.recipientName}',
+                    '${invite.place.name} - Para ${invite.recipientName}',
                     style: TextStyle(color: Color(0xFFF3F4F6), fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -79,7 +79,7 @@ class InviteWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 10, bottom: (inviteTitle != 'Rechazada') ? 20 : 0),
                 child: Text(
-                  printDate(this.invite) + ' - ' + printTime(this.invite),
+                  printDate(invite) + ' - ' + printTime(invite),
                   style: TextStyle(color: Color(0xFFF3F4F6), fontSize: 15, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -132,7 +132,7 @@ class _ActionInvite extends StatelessWidget {
         splashRadius: 30,
         onPressed: () async {},
         icon: icon != null
-            ? Icon(this.icon)
+            ? Icon(icon)
             : SvgPicture.asset(
                 path!,
                 height: 50,

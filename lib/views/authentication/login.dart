@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tec_pass/bloc/login/login_bloc.dart';
-import 'package:tec_pass/models/form_submission_status.dart';
+import 'package:tec_pass/bloc/form_submission_status.dart';
 import 'package:tec_pass/widgets/customappbar.dart';
 import 'package:tec_pass/widgets/customtextfield.dart';
 

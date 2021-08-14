@@ -20,9 +20,41 @@ class App {
 
   Future<void> initialize() async {
     _preferences = await SharedPreferences.getInstance();
-    theme = _Theme(this._preferences);
-    user = User(this._preferences);
+    theme = _Theme(_preferences);
+    user = User(_preferences);
     api = API();
+  }
+
+  Future<bool> login({required String email, required String password}) async {
+    if (await api.login(email: email, password: password)) {
+      await user.save(email: email, password: password);
+    }
+    return true;
+  }
+
+  Future<bool> register({
+    required String fullName,
+    required String mobile,
+    required String rut,
+    required String email,
+    required String password,
+  }) async {
+    if (await api.register(
+      email: email,
+      password: password,
+      fullName: fullName,
+      mobile: mobile,
+      rut: rut,
+    )) {
+      await user.save(email: email, password: password);
+    }
+    return true;
+  }
+
+  Future<bool> logout(BuildContext context) async {
+    final result = await user.logout();
+    Navigator.of(context).pushReplacementNamed('login');
+    return result;
   }
 
   void cacheImages(BuildContext context) async {
@@ -63,24 +95,23 @@ class App {
 }
 
 class API {
-  Future<bool> login() async {
+  Future<bool> login({required String email, required String password}) async {
     print('attempting login');
     await Future.delayed(Duration(seconds: 2));
     print('logged in');
     return true;
   }
 
-  Future<bool> register() async {
+  Future<bool> register({
+    required String fullName,
+    required String mobile,
+    required String rut,
+    required String email,
+    required String password,
+  }) async {
     print('attempting login');
     await Future.delayed(Duration(seconds: 2));
     print('logged in');
-    return true;
-  }
-
-  Future<bool> logout() async {
-    print('attempting logout');
-    await Future.delayed(Duration(seconds: 2));
-    print('logged out');
     return true;
   }
 }
@@ -92,20 +123,23 @@ class User {
   late final SharedPreferences _preferences;
 
   User(SharedPreferences preferences) {
-    this._preferences = preferences;
+    _preferences = preferences;
     email = preferences.getString('email');
     password = preferences.getString('password'); // TODO: convert password to token
     isSet = email != null;
   }
 
-  save({String? password, String? email}) async {
-    if (email != null) await _preferences.setString('email', email);
-    if (password != null) await _preferences.setString('password', password);
+  save({required String password, required String email}) async {
+    return Future.wait([
+      _preferences.setString('email', email),
+      _preferences.setString('password', password),
+    ]);
   }
 
-  logout() async {
-    if (email != null) await _preferences.remove('email');
-    if (password != null) await _preferences.remove('password');
+  Future<bool> logout() async {
+    await _preferences.remove('email');
+    await _preferences.remove('password');
+    return true;
   }
 }
 

@@ -9,7 +9,7 @@ import 'package:meta/meta.dart';
 import 'package:tec_pass/app.dart';
 import 'package:tec_pass/helpers/helpers.dart';
 import 'package:tec_pass/main.dart';
-import 'package:tec_pass/models/form_submission_status.dart';
+import 'package:tec_pass/bloc/form_submission_status.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
@@ -43,10 +43,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         yield state.copyWith(formStatus: FormSubmitting());
         try {
           // try to Register
-          if (await api.register()) {
+          if (await app.register(
+            email: state.email,
+            fullName: state.fullName,
+            mobile: state.mobile,
+            password: state.password,
+            rut: state.rut,
+          )) {
             // save the information if it was successful
-            app.user.save(email: state.email, password: state.password);
-            yield state.copyWith(formStatus: SubmissionSuccess());
+            yield RegisterState(formStatus: SubmissionSuccess());
           }
         } catch (error) {
           // Show the error message if it fails

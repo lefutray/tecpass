@@ -25,23 +25,23 @@ class CustomFeatureOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return DescribedFeatureOverlay(
       onComplete: () async {
-        if (this.featureId == 'place_exit_widget') {
+        if (featureId == 'place_exit_widget') {
           FeatureDiscovery.completeCurrentStep(context);
           BlocProvider.of<CustomNavBarBloc>(context).add(Visits());
         }
-        if (this.featureId == 'visits_tab') {
+        if (featureId == 'visits_tab') {
           FeatureDiscovery.completeCurrentStep(context);
           BlocProvider.of<CustomNavBarBloc>(context).add(Profile());
         }
         return await Future.value(true);
       },
-      featureId: this.featureId,
-      targetColor: this.targetColor,
+      featureId: featureId,
+      targetColor: targetColor,
       barrierDismissible: false,
       backgroundColor: Colors.black,
       backgroundOpacity: 0.7,
-      title: (this.title == null) ? null : Text(this.title!),
-      description: Text(this.description),
+      title: (title == null) ? null : Text(title!),
+      description: Text(description),
       tapTarget: AbsorbPointer(child: tapTarget ?? child),
       child: child,
     );
