@@ -13,7 +13,7 @@ class LoginState {
     String errors = '';
     if (!RegExp(r'[A-Z]').hasMatch(password)) errors += '· 1 Mayúscula\n';
     if (!RegExp(r'[a-z]').hasMatch(password)) errors += '· 1 Minúscula\n';
-    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) errors += '· 1 Caracter especial\n';
+    // if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) errors += '· 1 Caracter especial\n';
     if (password.characters.length <= 8) errors += '· 8 Caracteres mínimo\n';
 
     if (errors.isEmpty) return null;

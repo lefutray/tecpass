@@ -84,7 +84,21 @@ class _TriangleButton extends StatelessWidget {
         angle: inverted ? pi : 0,
         child: CustomPaint(
           painter: _TrianglePainter(strokeColor: color),
-          child: Container(height: size, width: size),
+          child: Container(
+            height: size,
+            width: size,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(size * 0.6),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  spreadRadius: 4,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
