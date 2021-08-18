@@ -154,10 +154,6 @@ class _Theme {
   final SharedPreferences _preferences;
 
   ThemeData _auto() {
-    if (WidgetsBinding.instance?.window.platformBrightness == Brightness.dark) {
-      changeTheme('dark');
-      return darkTheme;
-    }
     changeTheme('light');
     return lightTheme;
   }
