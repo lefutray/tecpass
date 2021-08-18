@@ -18,8 +18,7 @@ class AccessPeopleView extends StatelessWidget {
       body: ListView.builder(
         itemCount: 20,
         itemBuilder: (BuildContext context, int index) {
-          return FadeInLeft(
-            from: 40,
+          return FadeIn(
             duration: Duration(milliseconds: 500),
             child: index == 0 ? showcaseWidget : widgets[index % 3],
           );
