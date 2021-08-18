@@ -1,4 +1,4 @@
-package com.example.tec_pass
+package com.tecpass.tec_pass
 
 import io.flutter.embedding.android.FlutterActivity
 
