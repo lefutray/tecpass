@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -60,7 +61,11 @@ class AuthRepository {
   }
 
   Future<void> logout(BuildContext context) async {
-    await preferences.setBool('isLoggedIn', false);
+    if (await LocalAuthentication().canCheckBiometrics) {
+      await preferences.setBool('isLoggedIn', false);
+    } else {
+      await deleteSession(context);
+    }
     Navigator.of(context).pushReplacementNamed('login');
   }
 
