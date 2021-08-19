@@ -5,11 +5,12 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
-import 'package:tec_pass/app.dart';
+import 'package:tec_pass/app/app.dart';
 import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
 import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
 import 'package:tec_pass/bloc/login/login_bloc.dart';
 import 'package:tec_pass/bloc/register/register_bloc.dart';
+import 'package:tec_pass/helpers/helpers.dart';
 
 final app = App();
 
@@ -29,8 +30,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => CustomNavBarBloc()),
         BlocProvider(create: (_) => ContactsBloc()),
-        BlocProvider(create: (_) => LoginBloc(app.api)),
-        BlocProvider(create: (_) => RegisterBloc(app.api)),
+        BlocProvider(create: (_) => LoginBloc()),
+        BlocProvider(create: (_) => RegisterBloc()),
       ],
       child: FeatureDiscovery(
         child: ThemeProvider(
@@ -53,9 +54,8 @@ class MyMaterialApp extends StatefulWidget {
 class _MyMaterialAppState extends State<MyMaterialApp> {
   @override
   void initState() {
-    app.cacheImages(context);
+    cacheImages(context);
     SchedulerBinding.instance?.addPostFrameCallback((_) {
-      // show the feature discovery sequence (if it hasn't been already shown)
       FeatureDiscovery.discoverFeatures(context, app.discoveryItems);
     });
     super.initState();
@@ -63,10 +63,21 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
   @override
   Widget build(BuildContext context) {
+    late final String initialRoute;
+    if (app.userIsSet) {
+      if (app.isLoggedIn ?? false) {
+        initialRoute = 'home';
+      } else {
+        initialRoute = 'relogin';
+      }
+    } else {
+      initialRoute = 'login';
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeProvider.instanceOf(context)?.theme,
-      initialRoute: app.user.isSet ? 'home' : 'login',
+      initialRoute: initialRoute,
       onGenerateRoute: app.routes,
     );
   }

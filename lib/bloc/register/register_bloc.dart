@@ -6,17 +6,16 @@ import 'package:fzregex/fzregex.dart';
 import 'package:fzregex/utils/pattern.dart';
 import 'package:meta/meta.dart';
 
-import 'package:tec_pass/app.dart';
+import 'package:tec_pass/app/app.dart';
 import 'package:tec_pass/helpers/helpers.dart';
-import 'package:tec_pass/main.dart';
 import 'package:tec_pass/bloc/form_submission_status.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final API api;
-  RegisterBloc(this.api) : super(RegisterState());
+  RegisterBloc() : super(RegisterState());
+  final app = App();
 
   @override
   Stream<RegisterState> mapEventToState(RegisterEvent event) async* {
@@ -43,7 +42,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         yield state.copyWith(formStatus: FormSubmitting());
         try {
           // try to Register
-          if (await app.register(
+          if (await app.authRepository.register(
             email: state.email,
             fullName: state.fullName,
             mobile: state.mobile,

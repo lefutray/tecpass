@@ -3,26 +3,25 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class Place {
   final String id;
+  final String query;
+  final String address;
+  final String? floor;
+  final String? additionalInfo;
   final String name;
 
-  Place(this.id, this.name);
+  Place({
+    required this.id,
+    required this.name,
+    required this.query,
+    required this.address,
+    this.floor,
+    this.additionalInfo,
+  });
 
-  Future<void> enter() async {
+  Future action(String action) async {
     await Fluttertoast.cancel();
     await Fluttertoast.showToast(
-      msg: "Entrando...",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.white,
-      textColor: Colors.black,
-      fontSize: 16.0,
-    );
-  }
-
-  Future<void> exit() async {
-    await Fluttertoast.cancel();
-    await Fluttertoast.showToast(
-      msg: "Saliendo...",
+      msg: action,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.white,
@@ -51,14 +50,14 @@ class Place {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        await enter();
+                        await action('Entrando...');
                         Navigator.pop(context);
                       },
                       child: Text('Entrar'),
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        await exit();
+                        await action("Saliendo...");
                         Navigator.pop(context);
                       },
                       child: Text('Salir'),

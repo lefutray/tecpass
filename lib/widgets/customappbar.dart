@@ -5,7 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
-import 'package:tec_pass/main.dart';
+import 'package:tec_pass/app/app.dart';
 import 'package:tec_pass/widgets/feature_overlay.dart';
 
 class AppLogo extends StatelessWidget {
@@ -56,6 +56,7 @@ class ThemeSwitchingIconButton extends StatefulWidget {
 
 class _ThemeSwitchingIconButtonState extends State<ThemeSwitchingIconButton> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+  final app = App();
 
   @override
   void initState() {

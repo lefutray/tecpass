@@ -9,11 +9,21 @@ class AccessPeopleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final widgets = [
-      PlaceWidget(place: Place('asdas', 'Oficina 401')),
-      PlaceWidget(place: Place('asdas', 'Oficina 510')),
-      PlaceWidget(place: Place('asdas', 'Puerta Principal')),
+      PlaceWidget(place: Place(id: 'asdas', name: 'Oficina 401', address: 'Av. Rivadavia 2344', query: 'Av. Rivadavia 2344', floor: '3')),
+      PlaceWidget(place: Place(id: 'asdas', name: 'Oficina 510', address: 'Av. Rivadavia 2344', query: 'Av. Rivadavia 2344', floor: '3')),
+      PlaceWidget(place: Place(id: 'asdas', name: 'Puerta Principal', address: 'Av. Rivadavia 2344', query: 'Av. Rivadavia 2344', floor: '3')),
     ];
-    final showcaseWidget = PlaceWidget(place: Place('asdas', 'Puerta Principal'), showcase: true);
+    final showcaseWidget = PlaceWidget(
+      place: Place(
+        id: 'asdas',
+        name: 'Puerta Principal',
+        address: 'Av. Rivadavia 2344',
+        query: 'Av. Rivadavia 2344',
+        floor: '3',
+      ),
+      showcase: true,
+    );
+
     return Scaffold(
       body: ListView.builder(
         itemCount: 20,

@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:tec_pass/app.dart';
-import 'package:tec_pass/main.dart';
+import 'package:tec_pass/app/app.dart';
 import 'package:tec_pass/bloc/form_submission_status.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final API api;
-  LoginBloc(this.api) : super(LoginState());
+  LoginBloc() : super(LoginState());
+  final app = App();
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
@@ -27,7 +26,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.copyWith(formStatus: FormSubmitting());
         try {
           // try to login
-          if (await app.login(email: state.email, password: state.password)) {
+          if (await app.authRepository.login(email: state.email, password: state.password)) {
             yield LoginState(formStatus: SubmissionSuccess());
           }
         } catch (error) {

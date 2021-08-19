@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,7 +111,7 @@ class __TextFieldsState extends State<_TextFields> {
                 hintText: 'Debe tener al menos 8 caracteres',
                 initialValue: state.password,
                 icon: Icons.lock_open_outlined,
-                inputType: TextInputType.visiblePassword,
+                inputType: TextInputType.text,
                 obscureText: true,
                 validator: state.validatePassword,
                 onChanged: (password) {
@@ -120,7 +121,7 @@ class __TextFieldsState extends State<_TextFields> {
               CustomTextField(
                 labelText: 'Confirmar contraseña',
                 initialValue: state.passwordConfirmation,
-                inputType: TextInputType.visiblePassword,
+                inputType: TextInputType.text,
                 icon: Icons.lock_open_outlined,
                 obscureText: true,
                 validator: state.validatePassword,

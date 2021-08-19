@@ -46,14 +46,14 @@ class PlaceWidget extends StatelessWidget {
             featureId: 'place_enter_widget',
             title: 'Ingresar',
             description: 'Este botón te permitirá ingresar al lugar.',
-            child: _TriangleButton(place.enter, size: size, color: Colors.green),
+            child: _TriangleButton(() async => await place.action('Entrando...'), size: size, color: Colors.green),
           ),
           SizedBox(width: 15),
           CustomFeatureOverlay(
             featureId: 'place_exit_widget',
             title: 'Salir',
             description: 'Y este, salir.',
-            child: _TriangleButton(place.exit, size: size, inverted: true),
+            child: _TriangleButton(() async => await place.action('Saliendo...'), size: size, inverted: true),
           ),
         ],
       ),
@@ -72,7 +72,7 @@ class _TriangleButton extends StatelessWidget {
 
   final double size;
   final Color color;
-  final Future<void> Function() onPressed;
+  final VoidCallback onPressed;
   final bool inverted;
 
   @override

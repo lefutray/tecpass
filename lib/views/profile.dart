@@ -1,14 +1,15 @@
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tec_pass/app/app.dart';
 import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
-import 'package:tec_pass/main.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final app = App();
     return Scaffold(
       body: ListView(
         children: [
@@ -28,7 +29,7 @@ class ProfileView extends StatelessWidget {
           ListTile(title: Text('C-3PO', textAlign: TextAlign.center, style: TextStyle(color: Colors.white))),
           ListTile(
             title: Text('Mostrar tutorial', style: TextStyle(color: Colors.white)),
-            trailing: Icon(Icons.lightbulb),
+            trailing: Icon(Icons.lightbulb, color: Colors.white),
             onTap: () async {
               await FeatureDiscovery.clearPreferences(context, app.discoveryItems);
               FeatureDiscovery.discoverFeatures(context, app.discoveryItems);
@@ -37,7 +38,7 @@ class ProfileView extends StatelessWidget {
           ),
           ListTile(
             title: Text('Cerrar sesión', style: TextStyle(color: Colors.white)),
-            trailing: Icon(Icons.logout),
+            trailing: Icon(Icons.logout, color: Colors.white),
             onTap: () async {
               await showDialog(
                 context: context,
@@ -50,7 +51,7 @@ class ProfileView extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        await app.logout(context);
+                        await app.authRepository.logout(context);
                       },
                       child: Text('SÍ'),
                     ),

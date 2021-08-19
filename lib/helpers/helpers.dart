@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
 
@@ -65,6 +66,7 @@ class RUTValidator {
   ///puntos y guiones.
   static String getRutDV(String rutString) {
     dynamic actualDV = _getRUTElements(rutString)[1];
+    
     return (RegExp(r'[0kK]').hasMatch(actualDV)) ? '0' : actualDV;
   }
 
@@ -173,4 +175,10 @@ class _RUTValidatorUtils {
   static String _longVersionFormat(String text) => '${text[0]}${text[1]}.${text[2]}${text[3]}'
       '${text[4]}.${text[5]}${text[6]}${text[7]}'
       '-${text[8]}';
+}
+
+void cacheImages(BuildContext context) async {
+  await precacheImage(AssetImage('assets/Logo-tecpass-s.png'), context);
+  await precachePicture(ExactAssetPicture(SvgPicture.svgStringDecoder, 'assets/Check.svg'), context);
+  await precachePicture(ExactAssetPicture(SvgPicture.svgStringDecoder, 'assets/Cancelar.svg'), context);
 }

@@ -10,6 +10,7 @@ class RegisterState {
 
   String? validateName(String? value) {
     if (fullName.length > 6) return null;
+    
     return 'El nombre de usuario debe tener más de 6 caracteres';
   }
 
