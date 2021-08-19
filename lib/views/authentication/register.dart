@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tec_pass/bloc/form_submission_status.dart';
 
 import 'package:tec_pass/bloc/register/register_bloc.dart';
 import 'package:tec_pass/helpers/helpers.dart';
@@ -18,21 +19,26 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Center(
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  SizedBox(height: constraints.maxHeight * 0.05),
-                  Center(child: AppLogo()),
-                  SizedBox(height: constraints.maxHeight * 0.1),
-                  _TextFields(),
-                  _Options(),
-                ],
-              ),
-            );
+        child: BlocListener<RegisterBloc, RegisterState>(
+          listener: (context, state) {
+            if (state.formStatus is SubmissionSuccess) Navigator.of(context).pushReplacementNamed('home');
           },
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Center(
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    SizedBox(height: constraints.maxHeight * 0.05),
+                    Center(child: AppLogo()),
+                    SizedBox(height: constraints.maxHeight * 0.1),
+                    _TextFields(),
+                    _Options(),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

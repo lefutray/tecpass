@@ -11,7 +11,7 @@ class FormSubmitting extends FormSubmissionStatus {}
 class SubmissionSuccess extends FormSubmissionStatus {}
 
 class SubmissionFailure extends FormSubmissionStatus {
-  final Exception exception;
+  final dynamic exception;
 
   SubmissionFailure(this.exception);
 }

@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class AuthRepository {
   SharedPreferences preferences;
   AuthRepository(this.preferences);
+  final baseUrl = 'https://joobyapp.bubbleapps.io/version-test/api/1.1/wf/';
+  final bearerToken = 'da1b47293a770649913670717a2835ff';
 
   Future<bool> login({required String email, required String password}) async {
     print('attempting login');
@@ -24,10 +30,26 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    print('attempting login');
-    await Future.delayed(Duration(seconds: 2));
-    if (await Future.value(true)) {
-      print('logged in');
+    final uri = Uri.parse('${baseUrl}registro_tecpass');
+
+    final response = await http.post(
+      uri,
+      headers: {
+        'Authorization': 'Bearer $bearerToken',
+      },
+      body: {
+        'nombre': fullName,
+        'rut': rut,
+        'celular': mobile,
+        'correo': email,
+        'password': password,
+        'projects': '["1629311633987x789879915594998900"]',
+      },
+    );
+
+    log(response.statusCode.toString());
+
+    if (response.statusCode == 200) {
       await Future.wait([
         preferences.setString('email', email),
         preferences.setString('password', password),
