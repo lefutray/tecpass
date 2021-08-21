@@ -63,10 +63,11 @@ class AuthRepository {
   Future<void> logout(BuildContext context) async {
     if (await LocalAuthentication().canCheckBiometrics) {
       await preferences.setBool('isLoggedIn', false);
+      Navigator.of(context).pushReplacementNamed('relogin');
     } else {
       await deleteSession(context);
+      Navigator.of(context).pushReplacementNamed('login');
     }
-    Navigator.of(context).pushReplacementNamed('login');
   }
 
   Future<void> deleteSession(BuildContext context) async {
