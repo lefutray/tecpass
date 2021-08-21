@@ -73,6 +73,7 @@ class _TextFields extends StatelessWidget {
                     labelText: 'Correo Electrónico',
                     icon: Icons.alternate_email,
                     initialValue: state.email,
+                    inputType: TextInputType.emailAddress,
                     onChanged: (username) => context.read<LoginBloc>().add(LoginEmailChanged(username)),
                     validator: state.validEmail,
                   ),

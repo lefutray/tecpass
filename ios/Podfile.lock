@@ -9,7 +9,7 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - local_auth_device_credentials (0.0.1):
+  - local_auth (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
@@ -25,7 +25,7 @@ DEPENDENCIES:
   - flutter_contacts (from `.symlinks/plugins/flutter_contacts/ios`)
   - flutter_sms (from `.symlinks/plugins/flutter_sms/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - local_auth_device_credentials (from `.symlinks/plugins/local_auth_device_credentials/ios`)
+  - local_auth (from `.symlinks/plugins/local_auth/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -45,8 +45,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_sms/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  local_auth_device_credentials:
-    :path: ".symlinks/plugins/local_auth_device_credentials/ios"
+  local_auth:
+    :path: ".symlinks/plugins/local_auth/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   shared_preferences:
@@ -60,7 +60,7 @@ SPEC CHECKSUMS:
   flutter_contacts: edb1c5ce76aa433e20e6cb14c615f4c0b66e0983
   flutter_sms: 91ce41530f55c85d6524d82307a5d555844c086a
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
-  local_auth_device_credentials: 7ea08f7e3a5cd32bd628d1f8ee60e22f9d78f668
+  local_auth: 25938960984c3a7f6e3253e3f8d962fdd16852bd
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
