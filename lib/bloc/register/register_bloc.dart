@@ -42,19 +42,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         yield state.copyWith(formStatus: FormSubmitting());
         try {
           // try to Register
-          if (await app.authRepository.register(
-            email: state.email,
-            fullName: state.fullName,
-            mobile: state.mobile,
-            password: state.password,
-            rut: state.rut,
-          )) {
+          if (await app.authRepository.register(email: state.email, name: state.fullName, phone: state.mobile, password: state.password, rut: state.rut)) {
             // save the information if it was successful
             yield RegisterState(formStatus: SubmissionSuccess());
           }
         } catch (error) {
           // Show the error message if it fails
-          yield state.copyWith(formStatus: SubmissionFailure(error));
+          yield state.copyWith(formStatus: SubmissionFailure());
         }
         break;
     }

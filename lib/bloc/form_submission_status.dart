@@ -1,3 +1,5 @@
+import 'package:tec_pass/bloc/login/login_result.dart';
+
 abstract class FormSubmissionStatus {
   const FormSubmissionStatus();
 }
@@ -11,7 +13,7 @@ class FormSubmitting extends FormSubmissionStatus {}
 class SubmissionSuccess extends FormSubmissionStatus {}
 
 class SubmissionFailure extends FormSubmissionStatus {
-  final dynamic exception;
+  final LoginResult? result;
 
-  SubmissionFailure(this.exception);
+  SubmissionFailure({this.result});
 }

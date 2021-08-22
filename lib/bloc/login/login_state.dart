@@ -10,7 +10,7 @@ class LoginState {
   }
 
   String? validPassword(String? value) {
-    if (password.characters.length <= 8) return '· La contraseña no puede estar vacía\n';
+    if (password.isEmpty) return '· La contraseña no puede estar vacía\n';
   }
 
   final FormSubmissionStatus formStatus;

@@ -12,7 +12,10 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.formStatus is SubmissionSuccess) Navigator.of(context).pushReplacementNamed('home');
+        if (state.formStatus is SubmissionSuccess) {
+          Navigator.of(context).pushReplacementNamed('home');
+          context.read<LoginBloc>().add(LoginFinished());
+        }
       },
       child: Scaffold(
         body: GestureDetector(
@@ -65,6 +68,7 @@ class _TextFields extends StatelessWidget {
         return Container(
           margin: EdgeInsets.symmetric(horizontal: 30),
           child: AutofillGroup(
+            onDisposeAction: AutofillContextAction.cancel,
             child: Form(
               key: _formKey,
               child: Column(

@@ -151,22 +151,25 @@ class _Options extends StatelessWidget {
       margin: EdgeInsets.only(top: 10),
       child: BlocBuilder<RegisterBloc, RegisterState>(
         builder: (context, state) {
+          final bool formSubmitting = (state.formStatus is FormSubmitting);
           return Column(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    context.read<RegisterBloc>().add(RegisterSubmitted());
-                  }
-                },
-                child: Text('Crear Cuenta'),
-                style: ElevatedButton.styleFrom(
-                  visualDensity: VisualDensity.comfortable,
-                  side: BorderSide(color: Colors.white70, width: 1),
-                  primary: Theme.of(context).scaffoldBackgroundColor,
+              if (!formSubmitting)
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      context.read<RegisterBloc>().add(RegisterSubmitted());
+                    }
+                  },
+                  child: Text('Crear Cuenta'),
+                  style: ElevatedButton.styleFrom(
+                    visualDensity: VisualDensity.comfortable,
+                    side: BorderSide(color: Colors.white70, width: 1),
+                    primary: Theme.of(context).scaffoldBackgroundColor,
+                  ),
                 ),
-              ),
+              if (formSubmitting) CircularProgressIndicator(),
               TextButton(
                 onPressed: () {
                   BlocProvider.of<RegisterBloc>(context).add(RegisterPasswordChanged(''));
