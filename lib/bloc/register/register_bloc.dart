@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:fzregex/fzregex.dart';
-import 'package:fzregex/utils/pattern.dart';
+// import 'package:fzregex/fzregex.dart';
+// import 'package:fzregex/utils/pattern.dart';
 import 'package:meta/meta.dart';
 
 import 'package:tec_pass/app/app.dart';
@@ -42,9 +42,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         yield state.copyWith(formStatus: FormSubmitting());
         try {
           // try to Register
-          if (await app.authRepository.register(email: state.email, name: state.fullName, phone: state.mobile, password: state.password, rut: state.rut)) {
+          final errors = await app.authRepository.register(email: state.email, name: state.fullName, phone: state.mobile, password: state.password, rut: state.rut);
+
+          if (errors.isEmpty) {
             // save the information if it was successful
             yield RegisterState(formStatus: SubmissionSuccess());
+          } else {
+            yield state.copyWith(formStatus: SubmissionFailure(errors: errors));
           }
         } catch (error) {
           // Show the error message if it fails
@@ -52,7 +56,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         }
         break;
       case RegisterFinished:
-        yield RegisterState();
+        yield state.copyWith(formStatus: InitialFormStatus());
         break;
     }
   }

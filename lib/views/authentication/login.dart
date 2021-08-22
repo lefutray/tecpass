@@ -12,6 +12,9 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
+        if (state.formStatus is FormSubmitting) {
+          _formKey.currentState?.validate();
+        }
         if (state.formStatus is SubmissionSuccess) {
           Navigator.of(context).pushReplacementNamed('home');
           context.read<LoginBloc>().add(LoginFinished());
@@ -79,7 +82,7 @@ class _TextFields extends StatelessWidget {
                     initialValue: state.email,
                     inputType: TextInputType.emailAddress,
                     onChanged: (username) => context.read<LoginBloc>().add(LoginEmailChanged(username)),
-                    validator: state.validEmail,
+                    validator: (_) => state.validateField('email'),
                   ),
                   CustomTextField(
                     labelText: 'Contraseña',
@@ -87,7 +90,7 @@ class _TextFields extends StatelessWidget {
                     initialValue: state.password,
                     autofillHints: [AutofillHints.password],
                     onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
-                    validator: state.validPassword,
+                    validator: (_) => state.validateField('password'),
                     obscureText: true,
                   ),
                 ],
@@ -124,10 +127,9 @@ class _Buttons extends StatelessWidget {
                 }
                 return ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      context.read<LoginBloc>().add(LoginSubmitted());
-                    }
+                    context.read<LoginBloc>().add(LoginFinished());
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    context.read<LoginBloc>().add(LoginSubmitted());
                   },
                   child: Text('Ingresar'),
                   style: ElevatedButton.styleFrom(

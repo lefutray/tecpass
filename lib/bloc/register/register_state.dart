@@ -8,34 +8,33 @@ class RegisterState {
   final String password;
   final String passwordConfirmation;
 
-  String? validateName(String? value) {
-    if (fullName.isEmpty) return 'El nombre de usuario debe tener más de 6 caracteres';
-  }
-
-  String? validateEmail(String? value) {
-    final valid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
-    if (!valid) return 'El correo electrónico no es válido';
-  }
-
-  String? validatePassword(String? value) {
-    String errors = '';
-    if (!RegExp(r'[A-Z]').hasMatch(password)) errors += '· 1 Mayúscula\n';
-    if (!RegExp(r'[a-z]').hasMatch(password)) errors += '· 1 Minúscula\n';
-    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) errors += '· 1 Caracter especial\n';
-    if (password.characters.length <= 8) errors += '· La contraseña debe tener más de 8 caracteres\n';
-    if (password != passwordConfirmation) errors += '· Las contraseñas no coinciden\n';
-
+  String? validateField(String field) {
+    String? errors = getErrorsFromParam(field);
     if (errors.isEmpty) return null;
     return errors;
   }
 
-  String? validateRUT(String? value) {
-    return RUTValidator().validator(value);
+  String getErrorsFromParam(String param) {
+    String errors = '';
+    if (formStatus is SubmissionFailure) {
+      if ((formStatus as SubmissionFailure).errors.isNotEmpty) {
+        final errorsAPI = (formStatus as SubmissionFailure).errors.where((element) => element?.param == param);
+        if (errorsAPI.isNotEmpty) {
+          for (final error in errorsAPI) {
+            errors = _addToNextLine(errors, error!.msg!);
+          }
+        }
+      }
+    }
+    return errors;
   }
 
-  String? validateMobile(String? value) {
-    if (Fzregex.hasMatch(mobile, FzPattern.phone)) return null;
-    return 'El número de celular no es válido';
+  _addToNextLine(String text, String add) {
+    if (text.isNotEmpty) {
+      return text + '\n' + add;
+    } else {
+      return add;
+    }
   }
 
   final FormSubmissionStatus formStatus;

@@ -8,7 +8,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
-import 'package:tec_pass/bloc/login/login_result.dart';
+import 'package:tec_pass/bloc/error_from_server.dart';
 
 class AuthRepository {
   SharedPreferences preferences;
@@ -16,20 +16,20 @@ class AuthRepository {
   final baseUrl = 'https://tecpassnode.herokuapp.com/api';
   final bearerToken = 'da1b47293a770649913670717a2835ff';
 
-  Future<LoginResult?> login({required String email, required String password}) async {
+  Future<List<Error?>> login({required String email, required String password}) async {
     final uri = Uri.parse('$baseUrl/auth/login');
     final body = jsonEncode({
-      "email": email,
-      "password": password,
+      'email': email,
+      'password': password,
     });
 
     final response = await http.post(
       uri,
-      headers: {"Content-Type": "application/json"},
+      headers: {'Content-Type': 'application/json'},
       body: body,
     );
 
-    print("response: " + response.body);
+    print('response: ' + response.body);
 
     final jsonResponse = json.decode(response.body);
 
@@ -39,14 +39,14 @@ class AuthRepository {
         preferences.setString('name', jsonResponse['user']['name']),
         preferences.setString('token', jsonResponse['token']),
       ]);
-      return null;
+      return [];
     } else if (response.statusCode == 400) {
-      return LoginResult.fromJson(jsonResponse);
+      return List<Error>.from(jsonResponse['errors'].map((error) => Error.fromJson(error)));
     }
-    return LoginResult();
+    return [Error(msg: 'No se ha podido autenticar su dirección de correo y contraseña.')];
   }
 
-  Future<bool> register({
+  Future<List<Error?>> register({
     required String name,
     required String email,
     required String phone,
@@ -64,7 +64,7 @@ class AuthRepository {
 
     final response = await http.post(
       uri,
-      headers: {"Content-Type": "application/json"},
+      headers: {'Content-Type': 'application/json'},
       body: body,
     );
 
@@ -77,9 +77,11 @@ class AuthRepository {
         preferences.setString('name', jsonResponse['user']['name']),
         preferences.setString('token', jsonResponse['token']),
       ]);
-      return true;
+      return [];
+    } else if (response.statusCode == 400) {
+      return List<Error>.from(jsonResponse['errors'].map((error) => Error.fromJson(error)));
     }
-    return false;
+    return [Error(msg: 'No se ha podido autenticar su dirección de correo y contraseña.')];
   }
 
   Future<void> logout(BuildContext context) async {

@@ -4,13 +4,33 @@ class LoginState {
   final String email;
   final String password;
 
-  String? validEmail(String? value) {
-    final valid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
-    if (!valid) return 'El correo electrónico no es válido';
+  String? validateField(String field) {
+    String? errors = getErrorsFromParam(field);
+    if (errors.isEmpty) return null;
+    return errors;
   }
 
-  String? validPassword(String? value) {
-    if (password.isEmpty) return '· La contraseña no puede estar vacía\n';
+  String getErrorsFromParam(String param) {
+    String errors = '';
+    if (formStatus is SubmissionFailure) {
+      if ((formStatus as SubmissionFailure).errors.isNotEmpty) {
+        final errorsAPI = (formStatus as SubmissionFailure).errors.where((element) => element?.param == param);
+        if (errorsAPI.isNotEmpty) {
+          for (final error in errorsAPI) {
+            errors = _addToNextLine(errors, error!.msg!);
+          }
+        }
+      }
+    }
+    return errors;
+  }
+
+  _addToNextLine(String text, String add) {
+    if (text.isNotEmpty) {
+      return text + '\n' + add;
+    } else {
+      return add;
+    }
   }
 
   final FormSubmissionStatus formStatus;

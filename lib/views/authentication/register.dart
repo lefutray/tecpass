@@ -21,6 +21,9 @@ class RegisterPage extends StatelessWidget {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
+            if (state.formStatus is FormSubmitting) {
+              _formKey.currentState?.validate();
+            }
             if (state.formStatus is SubmissionSuccess) {
               Navigator.of(context).pushReplacementNamed('home');
               context.read<RegisterBloc>().add(RegisterFinished());
@@ -76,7 +79,7 @@ class __TextFieldsState extends State<_TextFields> {
                 hintText: 'John Doe',
                 initialValue: state.fullName,
                 icon: Icons.account_circle_outlined,
-                validator: state.validateName,
+                validator: (_) => state.validateField('name'),
                 onChanged: (fullName) {
                   context.read<RegisterBloc>().add(RegisterFullNameChanged(fullName));
                 },
@@ -87,7 +90,7 @@ class __TextFieldsState extends State<_TextFields> {
                 initialValue: state.email,
                 inputType: TextInputType.emailAddress,
                 icon: Icons.alternate_email,
-                validator: state.validateEmail,
+                validator: (_) => state.validateField('email'),
                 onChanged: (email) {
                   context.read<RegisterBloc>().add(RegisterEmailChanged(email));
                 },
@@ -98,7 +101,7 @@ class __TextFieldsState extends State<_TextFields> {
                 initialValue: state.mobile,
                 inputType: TextInputType.phone,
                 icon: Icons.phone,
-                validator: state.validateMobile,
+                validator: (_) => state.validateField('phone'),
                 onChanged: (mobile) {
                   context.read<RegisterBloc>().add(RegisterMobileChanged(mobile));
                 },
@@ -109,7 +112,7 @@ class __TextFieldsState extends State<_TextFields> {
                 inputType: TextInputType.text,
                 icon: Icons.fingerprint,
                 controller: _rutController,
-                validator: state.validateRUT,
+                validator: (_) => state.validateField('rut'),
                 onChanged: (rut) {
                   RUTValidator.formatFromTextController(_rutController);
                   context.read<RegisterBloc>().add(RegisterRUTChanged(RUTValidator.formatFromText(rut)));
@@ -122,20 +125,9 @@ class __TextFieldsState extends State<_TextFields> {
                 icon: Icons.lock_open_outlined,
                 inputType: TextInputType.text,
                 obscureText: true,
-                validator: state.validatePassword,
+                validator: (_) => state.validateField('password'),
                 onChanged: (password) {
                   context.read<RegisterBloc>().add(RegisterPasswordChanged(password));
-                },
-              ),
-              CustomTextField(
-                labelText: 'Confirmar contraseña',
-                initialValue: state.passwordConfirmation,
-                inputType: TextInputType.text,
-                icon: Icons.lock_open_outlined,
-                obscureText: true,
-                validator: state.validatePassword,
-                onChanged: (passwordConfirmation) {
-                  context.read<RegisterBloc>().add(RegisterPasswordConfirmationChanged(passwordConfirmation));
                 },
               ),
             ],
@@ -160,10 +152,9 @@ class _Options extends StatelessWidget {
               if (!formSubmitting)
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      context.read<RegisterBloc>().add(RegisterSubmitted());
-                    }
+                    context.read<RegisterBloc>().add(RegisterFinished());
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    context.read<RegisterBloc>().add(RegisterSubmitted());
                   },
                   child: Text('Crear Cuenta'),
                   style: ElevatedButton.styleFrom(

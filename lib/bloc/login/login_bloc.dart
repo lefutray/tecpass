@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:tec_pass/app/app.dart';
 import 'package:tec_pass/bloc/form_submission_status.dart';
-import 'package:tec_pass/bloc/login/login_result.dart';
+import 'package:tec_pass/bloc/error_from_server.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -18,31 +18,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     switch (event.runtimeType) {
       case LoginEmailChanged:
-        yield state.copyWith(email: (event as LoginEmailChanged).email);
+        yield state.copyWith(email: (event as LoginEmailChanged).email, formStatus: InitialFormStatus());
         break;
       case LoginPasswordChanged:
-        yield state.copyWith(password: (event as LoginPasswordChanged).password);
+        yield state.copyWith(password: (event as LoginPasswordChanged).password, formStatus: InitialFormStatus());
         break;
       case LoginSubmitted:
         yield state.copyWith(formStatus: FormSubmitting());
         try {
           // try to login
-          final LoginResult? result = await app.authRepository.login(email: state.email, password: state.password);
+          final List<Error?> errors = await app.authRepository.login(email: state.email, password: state.password);
 
-          if (result == null) {
+          if (errors.isEmpty) {
             yield LoginState(formStatus: SubmissionSuccess());
           } else {
-            print(result);
-            yield LoginState(formStatus: SubmissionFailure(result: result));
+            yield state.copyWith(formStatus: SubmissionFailure(errors: errors));
           }
         } catch (error) {
-          print(error);
           // Show the error message if it fails
           yield state.copyWith(formStatus: SubmissionFailure());
         }
         break;
       case LoginFinished:
-        yield LoginState();
+        yield state.copyWith(formStatus: InitialFormStatus());
         break;
     }
   }
