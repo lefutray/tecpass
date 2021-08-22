@@ -36,3 +36,4 @@ class RegisterPasswordConfirmationChanged extends RegisterEvent {
 }
 
 class RegisterSubmitted extends RegisterEvent {}
+class RegisterFinished extends RegisterEvent {}

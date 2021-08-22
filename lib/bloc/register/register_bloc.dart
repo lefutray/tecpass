@@ -51,6 +51,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           yield state.copyWith(formStatus: SubmissionFailure());
         }
         break;
+      case RegisterFinished:
+        yield RegisterState();
+        break;
     }
   }
 }

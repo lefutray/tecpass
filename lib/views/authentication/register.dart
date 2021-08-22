@@ -21,7 +21,10 @@ class RegisterPage extends StatelessWidget {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
-            if (state.formStatus is SubmissionSuccess) Navigator.of(context).pushReplacementNamed('home');
+            if (state.formStatus is SubmissionSuccess) {
+              Navigator.of(context).pushReplacementNamed('home');
+              context.read<RegisterBloc>().add(RegisterFinished());
+            }
           },
           child: LayoutBuilder(
             builder: (context, constraints) {
