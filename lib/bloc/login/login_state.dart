@@ -3,6 +3,7 @@ part of 'login_bloc.dart';
 class LoginState {
   final String email;
   final String password;
+  final GlobalKey<FormState> formKey;
 
   String? validateField(String field) {
     String? errors = getErrorsFromParam(field);
@@ -39,6 +40,7 @@ class LoginState {
     this.email = '',
     this.password = '',
     this.formStatus = const InitialFormStatus(),
+    required this.formKey,
   });
 
   LoginState copyWith({String? email, String? password, FormSubmissionStatus? formStatus}) {
@@ -46,6 +48,7 @@ class LoginState {
       email: email ?? this.email,
       password: password ?? this.password,
       formStatus: formStatus ?? this.formStatus,
+      formKey: formKey,
     );
   }
 }

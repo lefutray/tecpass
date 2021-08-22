@@ -14,7 +14,7 @@ part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  RegisterBloc() : super(RegisterState());
+  RegisterBloc() : super(RegisterState(formKey: GlobalKey<FormState>()));
   final app = App();
 
   @override
@@ -41,12 +41,20 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       case RegisterSubmitted:
         yield state.copyWith(formStatus: FormSubmitting());
         try {
+          state.formKey.currentState?.validate();
           // try to Register
-          final errors = await app.authRepository.register(email: state.email, name: state.fullName, phone: state.mobile, password: state.password, rut: state.rut);
+          final errors = await app.authRepository.register(
+            email: state.email,
+            name: state.fullName,
+            phone: state.mobile,
+            password: state.password,
+            rut: state.rut,
+            passwordConfirmation: state.passwordConfirmation,
+          );
 
           if (errors.isEmpty) {
             // save the information if it was successful
-            yield RegisterState(formStatus: SubmissionSuccess());
+            yield RegisterState(formStatus: SubmissionSuccess(), formKey: state.formKey);
           } else {
             yield state.copyWith(formStatus: SubmissionFailure(errors: errors));
           }

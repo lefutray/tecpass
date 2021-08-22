@@ -12,9 +12,6 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.formStatus is FormSubmitting) {
-          _formKey.currentState?.validate();
-        }
         if (state.formStatus is SubmissionSuccess) {
           Navigator.of(context).pushReplacementNamed('home');
           context.read<LoginBloc>().add(LoginFinished());
@@ -59,8 +56,6 @@ class _Options extends StatelessWidget {
   }
 }
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 class _TextFields extends StatelessWidget {
   const _TextFields({Key? key}) : super(key: key);
 
@@ -73,7 +68,7 @@ class _TextFields extends StatelessWidget {
           child: AutofillGroup(
             onDisposeAction: AutofillContextAction.cancel,
             child: Form(
-              key: _formKey,
+              key: state.formKey,
               child: Column(
                 children: [
                   CustomTextField(

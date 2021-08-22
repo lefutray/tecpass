@@ -11,7 +11,7 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginState());
+  LoginBloc() : super(LoginState(formKey: GlobalKey<FormState>()));
   final app = App();
 
   @override
@@ -27,10 +27,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.copyWith(formStatus: FormSubmitting());
         try {
           // try to login
-          final List<Error?> errors = await app.authRepository.login(email: state.email, password: state.password);
+          final List<AuthError?> errors = await app.authRepository.login(email: state.email, password: state.password);
 
           if (errors.isEmpty) {
-            yield LoginState(formStatus: SubmissionSuccess());
+            yield LoginState(formStatus: SubmissionSuccess(), formKey: state.formKey);
           } else {
             yield state.copyWith(formStatus: SubmissionFailure(errors: errors));
           }

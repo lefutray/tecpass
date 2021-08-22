@@ -7,6 +7,7 @@ class RegisterState {
   final String email;
   final String password;
   final String passwordConfirmation;
+  final GlobalKey<FormState> formKey;
 
   String? validateField(String field) {
     String? errors = getErrorsFromParam(field);
@@ -51,6 +52,7 @@ class RegisterState {
     this.password = '',
     this.passwordConfirmation = '',
     this.formStatus = const InitialFormStatus(),
+    required this.formKey,
   });
 
   RegisterState copyWith({
@@ -70,6 +72,7 @@ class RegisterState {
       password: password ?? this.password,
       passwordConfirmation: passwordConfirmation ?? this.passwordConfirmation,
       formStatus: formStatus ?? this.formStatus,
+      formKey: formKey,
     );
   }
 }

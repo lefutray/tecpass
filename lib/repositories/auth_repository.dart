@@ -16,7 +16,7 @@ class AuthRepository {
   final baseUrl = 'https://tecpassnode.herokuapp.com/api';
   final bearerToken = 'da1b47293a770649913670717a2835ff';
 
-  Future<List<Error?>> login({required String email, required String password}) async {
+  Future<List<AuthError?>> login({required String email, required String password}) async {
     final uri = Uri.parse('$baseUrl/auth/login');
     final body = jsonEncode({
       'email': email,
@@ -41,17 +41,18 @@ class AuthRepository {
       ]);
       return [];
     } else if (response.statusCode == 400) {
-      return List<Error>.from(jsonResponse['errors'].map((error) => Error.fromJson(error)));
+      return List<AuthError>.from(jsonResponse['errors'].map((error) => AuthError.fromJson(error)));
     }
-    return [Error(msg: 'No se ha podido autenticar su dirección de correo y contraseña.')];
+    return [AuthError(msg: 'No se ha podido autenticar su dirección de correo y contraseña.')];
   }
 
-  Future<List<Error?>> register({
+  Future<List<AuthError?>> register({
     required String name,
     required String email,
     required String phone,
     required String rut,
     required String password,
+    required String passwordConfirmation,
   }) async {
     final uri = Uri.parse('$baseUrl/users');
     final body = jsonEncode({
@@ -60,6 +61,7 @@ class AuthRepository {
       'phone': phone,
       'rut': rut,
       'password': password,
+      'passwordConfirmation': passwordConfirmation,
     });
 
     final response = await http.post(
@@ -79,9 +81,9 @@ class AuthRepository {
       ]);
       return [];
     } else if (response.statusCode == 400) {
-      return List<Error>.from(jsonResponse['errors'].map((error) => Error.fromJson(error)));
+      return List<AuthError>.from(jsonResponse['errors'].map((error) => AuthError.fromJson(error)));
     }
-    return [Error(msg: 'No se ha podido autenticar su dirección de correo y contraseña.')];
+    return [AuthError(msg: 'No se ha podido autenticar su dirección de correo y contraseña.')];
   }
 
   Future<void> logout(BuildContext context) async {

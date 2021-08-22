@@ -1,5 +1,5 @@
-class Error {
-  Error({
+class AuthError {
+  AuthError({
     this.msg,
     this.param,
     this.location,
@@ -9,8 +9,8 @@ class Error {
   final String? param;
   final String? location;
 
-  factory Error.fromJson(Map<String, dynamic> json) {
-    return Error(
+  factory AuthError.fromJson(Map<String, dynamic> json) {
+    return AuthError(
       msg: json["msg"],
       param: json["param"],
       location: json["location"],

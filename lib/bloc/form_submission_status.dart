@@ -13,7 +13,7 @@ class FormSubmitting extends FormSubmissionStatus {}
 class SubmissionSuccess extends FormSubmissionStatus {}
 
 class SubmissionFailure extends FormSubmissionStatus {
-  final List<Error?> errors;
+  final List<AuthError?> errors;
 
   SubmissionFailure({this.errors = const []});
 }

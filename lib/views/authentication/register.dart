@@ -21,9 +21,6 @@ class RegisterPage extends StatelessWidget {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
-            if (state.formStatus is FormSubmitting) {
-              _formKey.currentState?.validate();
-            }
             if (state.formStatus is SubmissionSuccess) {
               Navigator.of(context).pushReplacementNamed('home');
               context.read<RegisterBloc>().add(RegisterFinished());
@@ -136,7 +133,7 @@ class __TextFieldsState extends State<_TextFields> {
                 inputType: TextInputType.text,
                 icon: Icons.lock_open_outlined,
                 obscureText: true,
-                validator: state.validatePassConfirmation,
+                validator: (_) => state.validateField('passwordConfirmation'),
                 onChanged: (passwordConfirmation) {
                   context.read<RegisterBloc>().add(RegisterPasswordConfirmationChanged(passwordConfirmation));
                 },

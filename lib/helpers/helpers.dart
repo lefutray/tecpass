@@ -33,7 +33,7 @@ void sendSMStoContacts(ContactsState contactsState) async {
     if (recipients.isNotEmpty) {
       try {
         final String? result = await sendSMS(message: 'Te invito a este lugar.', recipients: recipients);
-        if (result != null && result == 'Error sending sms') {
+        if (result != null && result == 'AuthError sending sms') {
           showError();
         }
       } on PlatformException catch (error) {
@@ -66,7 +66,7 @@ class RUTValidator {
   ///puntos y guiones.
   static String getRutDV(String rutString) {
     dynamic actualDV = _getRUTElements(rutString)[1];
-    
+
     return (RegExp(r'[0kK]').hasMatch(actualDV)) ? '0' : actualDV;
   }
 
@@ -87,7 +87,7 @@ class RUTValidator {
       numbers = getRutNumbers(value);
       dv = getRutDV(value);
     } catch (e) {
-      print('RUT Validation Error: $e');
+      print('RUT Validation AuthError: $e');
       return validationErrorText;
     }
 
