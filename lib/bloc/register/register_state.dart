@@ -14,6 +14,10 @@ class RegisterState {
     return errors;
   }
 
+  String? validatePassConfirmation(String? value) {
+    if (password != passwordConfirmation) return 'Las contraseñas no coinciden';
+  }
+
   String getErrorsFromParam(String param) {
     String errors = '';
     if (formStatus is SubmissionFailure) {

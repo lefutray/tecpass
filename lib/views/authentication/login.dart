@@ -116,7 +116,10 @@ class _Buttons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             TextButton(
-              onPressed: () => Navigator.of(context).pushReplacementNamed('register'),
+              onPressed: () {
+                context.read<LoginBloc>().add(LoginPasswordChanged(''));
+                Navigator.of(context).pushReplacementNamed('register');
+              },
               child: Text('Registrarme', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w300)),
               style: TextButton.styleFrom(primary: Theme.of(context).scaffoldBackgroundColor),
             ),

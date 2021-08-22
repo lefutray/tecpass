@@ -130,6 +130,17 @@ class __TextFieldsState extends State<_TextFields> {
                   context.read<RegisterBloc>().add(RegisterPasswordChanged(password));
                 },
               ),
+              CustomTextField(
+                labelText: 'Confirmar contraseña',
+                initialValue: state.passwordConfirmation,
+                inputType: TextInputType.text,
+                icon: Icons.lock_open_outlined,
+                obscureText: true,
+                validator: state.validatePassConfirmation,
+                onChanged: (passwordConfirmation) {
+                  context.read<RegisterBloc>().add(RegisterPasswordConfirmationChanged(passwordConfirmation));
+                },
+              ),
             ],
           ),
         );

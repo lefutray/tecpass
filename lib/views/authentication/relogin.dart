@@ -16,6 +16,16 @@ class ReLogin extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          CircleAvatar(
+            child: Icon(
+              Icons.person,
+              color: Colors.black,
+              size: MediaQuery.of(context).size.width * 0.1,
+            ),
+            radius: MediaQuery.of(context).size.width * 0.08,
+            backgroundColor: Colors.white,
+          ),
+          SizedBox(height: MediaQuery.of(context).size.width * 0.1),
           Text('Encontramos una sesión previa de ${app.email ?? app.name}', style: TextStyle(color: Colors.white)),
           Text('¿Quieres restaurar esta sesión?', style: TextStyle(color: Colors.white)),
           Row(
