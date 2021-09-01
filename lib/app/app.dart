@@ -63,7 +63,7 @@ class App {
   bool get userIsSet => preferences.getString('email') != null;
   String? get email => preferences.getString('email');
   String? get name => preferences.getString('name');
-  String? get token => preferences.getString('token');
+  String? get authToken => preferences.getString('authToken');
 
   final Set<String> discoveryItems = {
     'access_tab',

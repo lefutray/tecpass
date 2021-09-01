@@ -14,7 +14,6 @@ class AuthRepository {
   SharedPreferences preferences;
   AuthRepository(this.preferences);
   final baseUrl = 'https://tecpassnode.herokuapp.com/api';
-  final bearerToken = 'da1b47293a770649913670717a2835ff';
 
   Future<List<AuthError?>> login({required String email, required String password}) async {
     final uri = Uri.parse('$baseUrl/auth/login');
@@ -37,7 +36,8 @@ class AuthRepository {
       await Future.wait([
         preferences.setString('email', email),
         preferences.setString('name', jsonResponse['user']['name']),
-        preferences.setString('token', jsonResponse['token']),
+        preferences.setString('authToken', jsonResponse['authToken']),
+        preferences.setString('refreshToken', jsonResponse['refreshToken']),
       ]);
       return [];
     } else if (response.statusCode == 400) {
@@ -77,7 +77,8 @@ class AuthRepository {
       await Future.wait([
         preferences.setString('email', jsonResponse['user']['email']),
         preferences.setString('name', jsonResponse['user']['name']),
-        preferences.setString('token', jsonResponse['token']),
+        preferences.setString('authToken', jsonResponse['authToken']),
+        preferences.setString('refreshToken', jsonResponse['refreshToken']),
       ]);
       return [];
     } else if (response.statusCode == 400) {
@@ -101,7 +102,8 @@ class AuthRepository {
     await Future.wait([
       preferences.setBool('isLoggedIn', false),
       preferences.remove('email'),
-      preferences.remove('token'),
+      preferences.remove('authToken'),
+      preferences.remove('refreshToken'),
       preferences.remove('name'),
     ]);
     Navigator.of(context).pushReplacementNamed('login');

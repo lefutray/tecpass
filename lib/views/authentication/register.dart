@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:tec_pass/bloc/form_submission_status.dart';
 
 import 'package:tec_pass/bloc/register/register_bloc.dart';
@@ -94,11 +95,12 @@ class __TextFieldsState extends State<_TextFields> {
               ),
               CustomTextField(
                 labelText: 'Celular',
-                hintText: '+569123456789',
+                hintText: '+56 9 2345-6789',
                 initialValue: state.mobile,
                 inputType: TextInputType.phone,
                 icon: Icons.phone,
                 validator: (_) => state.validateField('phone'),
+                inputFormatters: [MaskedInputFormatter('+0 0 0000-0000')],
                 onChanged: (mobile) {
                   context.read<RegisterBloc>().add(RegisterMobileChanged(mobile));
                 },
