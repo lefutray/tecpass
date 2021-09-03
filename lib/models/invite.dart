@@ -1,4 +1,4 @@
-import 'package:tec_pass/models/place.dart';
+part of 'models.dart';
 
 class Invite {
   final DateTime date;

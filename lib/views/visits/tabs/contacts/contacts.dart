@@ -7,9 +7,9 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 
 import 'package:tec_pass/helpers/helpers.dart';
-import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
+import 'package:tec_pass/bloc/bloc.dart';
 import 'package:tec_pass/views/visits/tabs/contacts/search.dart';
-import 'package:tec_pass/widgets/contact_widget.dart';
+import 'package:tec_pass/widgets/widgets.dart';
 
 class ContactsPage extends StatelessWidget {
   const ContactsPage({Key? key}) : super(key: key);

@@ -1,7 +1,9 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:tec_pass/models/place.dart';
-import 'package:tec_pass/widgets/place_widget.dart';
+
+import 'package:animate_do/animate_do.dart';
+
+import 'package:tec_pass/models/models.dart';
+import 'package:tec_pass/widgets/widgets.dart';
 
 class AccessPeopleView extends StatelessWidget {
   const AccessPeopleView({Key? key}) : super(key: key);

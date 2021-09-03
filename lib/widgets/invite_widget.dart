@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
-
-import 'package:tec_pass/models/invite.dart';
+part of 'widgets.dart';
 
 class InviteWidget extends StatelessWidget {
   const InviteWidget({Key? key, required this.invite}) : super(key: key);

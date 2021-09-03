@@ -1,12 +1,4 @@
-import 'dart:math' as math;
-import 'package:flutter/material.dart';
-
-import 'package:lottie/lottie.dart';
-import 'package:animate_do/animate_do.dart';
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-
-import 'package:tec_pass/app/app.dart';
-import 'package:tec_pass/widgets/feature_overlay.dart';
+part of 'widgets.dart';
 
 class AppLogo extends StatelessWidget {
   const AppLogo({Key? key}) : super(key: key);

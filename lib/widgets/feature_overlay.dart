@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-
-import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
+part of 'widgets.dart';
 
 class CustomFeatureOverlay extends StatelessWidget {
   const CustomFeatureOverlay({

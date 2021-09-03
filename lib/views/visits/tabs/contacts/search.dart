@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
-import 'package:tec_pass/widgets/contact_widget.dart';
+import 'package:tec_pass/bloc/bloc.dart';
+import 'package:tec_pass/widgets/widgets.dart';
 
 class ContactSearch extends SearchDelegate<Contact?> {
   List suggestions = [];

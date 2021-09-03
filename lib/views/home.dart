@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
-import 'package:tec_pass/views/access/access.dart';
-import 'package:tec_pass/views/profile.dart';
-import 'package:tec_pass/views/visits/visits.dart';
-import 'package:tec_pass/widgets/customappbar.dart';
-import 'package:tec_pass/widgets/customnavbar.dart';
+import 'package:tec_pass/bloc/bloc.dart';
+import 'package:tec_pass/views/views.dart';
+import 'package:tec_pass/widgets/widgets.dart';
 
 class HomePage extends StatelessWidget {
   @override

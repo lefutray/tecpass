@@ -1,8 +1,4 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
-
-import 'package:tec_pass/models/place.dart';
-import 'package:tec_pass/widgets/feature_overlay.dart';
+part of 'widgets.dart';
 
 class PlaceWidget extends StatelessWidget {
   const PlaceWidget({
@@ -81,7 +77,7 @@ class _TriangleButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       onPressed: onPressed,
       icon: Transform.rotate(
-        angle: inverted ? pi : 0,
+        angle: inverted ? math.pi : 0,
         child: CustomPaint(
           painter: _TrianglePainter(strokeColor: color),
           child: Container(

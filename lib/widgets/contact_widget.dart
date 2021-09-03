@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_contacts/contact.dart';
+part of 'widgets.dart';
 
 class ContactWidget extends StatelessWidget {
   const ContactWidget(this.contact, this.isSelected, {Key? key, this.onChanged}) : super(key: key);

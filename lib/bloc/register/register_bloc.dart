@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-// import 'package:fzregex/fzregex.dart';
-// import 'package:fzregex/utils/pattern.dart';
 import 'package:meta/meta.dart';
 
 import 'package:tec_pass/app/app.dart';

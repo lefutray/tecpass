@@ -1,15 +1,12 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
 import 'package:tec_pass/app/app.dart';
-import 'package:tec_pass/bloc/contacts/contacts_bloc.dart';
-import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
-import 'package:tec_pass/bloc/login/login_bloc.dart';
-import 'package:tec_pass/bloc/register/register_bloc.dart';
+import 'package:tec_pass/bloc/bloc.dart';
 import 'package:tec_pass/helpers/helpers.dart';
 
 final app = App();
@@ -32,6 +29,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ContactsBloc()),
         BlocProvider(create: (_) => LoginBloc()),
         BlocProvider(create: (_) => RegisterBloc()),
+        BlocProvider(create: (_) => UserBloc(app.preferences)),
       ],
       child: FeatureDiscovery(
         child: ThemeProvider(

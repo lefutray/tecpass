@@ -1,4 +1,4 @@
-import 'package:tec_pass/models/place.dart';
+part of 'models.dart';
 
 class Project {
   final List<Place> places;

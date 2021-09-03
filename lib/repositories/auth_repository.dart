@@ -7,8 +7,7 @@ import 'package:local_auth/local_auth.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
-import 'package:tec_pass/bloc/error_from_server.dart';
+import 'package:tec_pass/bloc/bloc.dart';
 
 class AuthRepository {
   SharedPreferences preferences;
@@ -36,14 +35,14 @@ class AuthRepository {
       await Future.wait([
         preferences.setString('email', email),
         preferences.setString('name', jsonResponse['user']['name']),
-        preferences.setString('authToken', jsonResponse['authToken']),
+        preferences.setString('accessToken', jsonResponse['accessToken']),
         preferences.setString('refreshToken', jsonResponse['refreshToken']),
       ]);
       return [];
     } else if (response.statusCode == 400) {
       return List<AuthError>.from(jsonResponse['errors'].map((error) => AuthError.fromJson(error)));
     }
-    return [AuthError(msg: 'No se ha podido autenticar su dirección de correo y contraseña.')];
+    return [AuthError(msg: 'No se ha podido autenticar su dirección de correo y contraseña.', param: 'general')];
   }
 
   Future<List<AuthError?>> register({
@@ -77,14 +76,14 @@ class AuthRepository {
       await Future.wait([
         preferences.setString('email', jsonResponse['user']['email']),
         preferences.setString('name', jsonResponse['user']['name']),
-        preferences.setString('authToken', jsonResponse['authToken']),
+        preferences.setString('accessToken', jsonResponse['accessToken']),
         preferences.setString('refreshToken', jsonResponse['refreshToken']),
       ]);
       return [];
     } else if (response.statusCode == 400) {
       return List<AuthError>.from(jsonResponse['errors'].map((error) => AuthError.fromJson(error)));
     }
-    return [AuthError(msg: 'No se ha podido autenticar su dirección de correo y contraseña.')];
+    return [AuthError(msg: 'No se ha podido autenticar su dirección de correo y contraseña.', param: 'general')];
   }
 
   Future<void> logout(BuildContext context) async {

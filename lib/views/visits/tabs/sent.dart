@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
 
-import 'package:tec_pass/models/invite.dart';
-import 'package:tec_pass/models/place.dart';
-import 'package:tec_pass/widgets/invite_widget.dart';
+import 'package:tec_pass/models/models.dart';
+import 'package:tec_pass/widgets/widgets.dart';
 
 class SentPage extends StatelessWidget {
   const SentPage({Key? key}) : super(key: key);

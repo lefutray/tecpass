@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
-import 'package:tec_pass/bloc/form_submission_status.dart';
 
-import 'package:tec_pass/bloc/register/register_bloc.dart';
+import 'package:tec_pass/bloc/bloc.dart';
 import 'package:tec_pass/helpers/helpers.dart';
-import 'package:tec_pass/widgets/customappbar.dart';
-import 'package:tec_pass/widgets/customtextfield.dart';
+import 'package:tec_pass/widgets/widgets.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -22,6 +21,7 @@ class RegisterPage extends StatelessWidget {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
+            print(state.formStatus);
             if (state.formStatus is SubmissionSuccess) {
               Navigator.of(context).pushReplacementNamed('home');
               context.read<RegisterBloc>().add(RegisterFinished());
@@ -65,6 +65,15 @@ class __TextFieldsState extends State<_TextFields> {
 
   @override
   Widget build(BuildContext context) {
+    PhoneInputFormatter.replacePhoneMask(
+      countryCode: 'CL',
+      newMask: '+00 (0) 0000-0000',
+    );
+    PhoneInputFormatter.replacePhoneMask(
+      countryCode: 'AR',
+      newMask: '+00 (0) 00 0000-0000',
+    );
+
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
         return Form(
@@ -100,7 +109,7 @@ class __TextFieldsState extends State<_TextFields> {
                 inputType: TextInputType.phone,
                 icon: Icons.phone,
                 validator: (_) => state.validateField('phone'),
-                inputFormatters: [MaskedInputFormatter('+0 0 0000-0000')],
+                inputFormatters: [PhoneInputFormatter()],
                 onChanged: (mobile) {
                   context.read<RegisterBloc>().add(RegisterMobileChanged(mobile));
                 },

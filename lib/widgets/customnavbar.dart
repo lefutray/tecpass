@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:tec_pass/bloc/customnavbar/customnavbar_bloc.dart';
-import 'package:tec_pass/widgets/feature_overlay.dart';
+part of 'widgets.dart';
 
 class CustomNavBar extends StatelessWidget {
   const CustomNavBar({Key? key}) : super(key: key);

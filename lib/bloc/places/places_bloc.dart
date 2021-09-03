@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:tec_pass/models/place.dart';
+import 'package:tec_pass/models/models.dart';
 
 part 'places_event.dart';
 part 'places_state.dart';

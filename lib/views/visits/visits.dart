@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:tec_pass/views/visits/tabs/contacts/contacts.dart';
-import 'package:tec_pass/views/visits/tabs/received.dart';
-import 'package:tec_pass/views/visits/tabs/sent.dart';
+import 'package:tec_pass/views/views.dart';
 
 class VisitsView extends StatelessWidget {
   const VisitsView({Key? key}) : super(key: key);

@@ -5,10 +5,7 @@ import 'package:tec_pass/app/theme.dart';
 
 import 'package:tec_pass/helpers/helpers.dart';
 import 'package:tec_pass/repositories/auth_repository.dart';
-import 'package:tec_pass/views/authentication/login.dart';
-import 'package:tec_pass/views/authentication/register.dart';
-import 'package:tec_pass/views/authentication/relogin.dart';
-import 'package:tec_pass/views/home.dart';
+import 'package:tec_pass/views/views.dart';
 
 class App {
   static final App _instance = App._();
@@ -64,6 +61,7 @@ class App {
   String? get email => preferences.getString('email');
   String? get name => preferences.getString('name');
   String? get authToken => preferences.getString('authToken');
+  String? get imageBase64 => preferences.getString('image');
 
   final Set<String> discoveryItems = {
     'access_tab',
