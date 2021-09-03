@@ -32,26 +32,40 @@ _sourceOptions(BuildContext context) {
     Navigator.pop(context);
   }
 
+  final savedPhoto = context.read<UserBloc>().state.base64Photo;
+
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       TextButton.icon(
         icon: Icon(Icons.camera, color: Colors.black),
+        label: Text('Cámara', style: TextStyle(color: Colors.black)),
         onPressed: () async {
           final photo = await _takePhoto(ImageSource.camera);
           if (photo != null) await handlePhoto(photo);
         },
-        label: Text('Cámara', style: TextStyle(color: Colors.black)),
       ),
       TextButton.icon(
         icon: Icon(Icons.image, color: Colors.black),
+        label: Text('Galería', style: TextStyle(color: Colors.black)),
         onPressed: () async {
           final photo = await _takePhoto(ImageSource.gallery);
           if (photo != null) await handlePhoto(photo);
         },
-        label: Text('Galería', style: TextStyle(color: Colors.black)),
       ),
+      if (savedPhoto != null && savedPhoto.isNotEmpty)
+        TextButton.icon(
+          icon: Icon(Icons.delete, color: Colors.black),
+          label: Text('Eliminar', style: TextStyle(color: Colors.black)),
+          onPressed: () async {
+            await confirmationPopup(
+              context,
+              title: '¿Está seguro de que quiere borrar la foto?',
+              onConfirm: () => context.read<UserBloc>().add(PhotoChanged('')),
+            );
+          },
+        ),
     ],
   );
 }

@@ -18,7 +18,6 @@ class ProfileView extends StatelessWidget {
     final app = App();
     return Scaffold(
       body: ListView(
-        shrinkWrap: true,
         children: [
           _Photo(),
           _UserData(app),
