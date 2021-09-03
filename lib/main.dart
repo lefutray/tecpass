@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ContactsBloc()),
         BlocProvider(create: (_) => LoginBloc()),
         BlocProvider(create: (_) => RegisterBloc()),
-        BlocProvider(create: (_) => UserBloc(app.preferences)),
+        BlocProvider(create: (_) => UserBloc(app.preferences)..loadPhoto()),
       ],
       child: FeatureDiscovery(
         child: ThemeProvider(

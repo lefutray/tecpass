@@ -10,6 +10,18 @@ part 'user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(SharedPreferences preferences) : super(UserState(preferences));
 
+  loadPhoto() {
+    final base64Photo = state.preferences.getString('photo');
+    if (base64Photo != null) {
+      add(PhotoChanged(base64Photo));
+    }
+  }
+
   @override
-  Stream<UserState> mapEventToState(UserEvent event) async* {}
+  Stream<UserState> mapEventToState(UserEvent event) async* {
+    if (event is PhotoChanged) {
+      state.preferences.setString('photo', event.photo);
+      yield state.copyWith(base64Photo: event.photo);
+    }
+  }
 }

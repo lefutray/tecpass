@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 
 import 'package:feature_discovery/feature_discovery.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:octo_image/octo_image.dart';
+
 import 'package:tec_pass/app/app.dart';
 import 'package:tec_pass/bloc/bloc.dart';
 import 'package:tec_pass/helpers/helpers.dart';
-import 'package:tec_pass/image.dart';
+import 'package:tec_pass/helpers/photo_picker.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -35,7 +36,6 @@ class _Photo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final hasPhoto = true;
     return Container(
       margin: EdgeInsets.only(
         left: size.width * 0.33,
@@ -44,22 +44,29 @@ class _Photo extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          OctoImage(
-            image: MemoryImage(Uint8List.fromList(base64Decode(image))),
-            imageBuilder: OctoImageTransformer.circleAvatar(),
-            placeholderBuilder: (context) => _noImage(size),
-            errorBuilder: (_, __, ___) => _noImage(size),
-            colorBlendMode: BlendMode.dstOver,
-            height: size.width * 0.35,
-            width: size.width * 0.35,
-            color: Colors.black38,
-            gaplessPlayback: true,
+          BlocBuilder<UserBloc, UserState>(
+            builder: (context, state) {
+              if (state.base64Photo != null) {
+                return OctoImage(
+                  image: MemoryImage(Uint8List.fromList(base64Decode(state.base64Photo!))),
+                  imageBuilder: OctoImageTransformer.circleAvatar(),
+                  placeholderBuilder: (_) => _noImage(size),
+                  errorBuilder: (_, __, ___) => _noImage(size),
+                  colorBlendMode: BlendMode.dstOver,
+                  height: size.width * 0.35,
+                  width: size.width * 0.35,
+                  color: Colors.black38,
+                  gaplessPlayback: true,
+                );
+              }
+              return _noImage(size);
+            },
           ),
           Positioned(
             bottom: 10,
             right: 0,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () => pickUserPhoto(context),
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
