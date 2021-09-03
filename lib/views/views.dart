@@ -14,5 +14,7 @@ export 'visits/tabs/received.dart';
 export 'visits/tabs/sent.dart';
 export 'visits/visits.dart';
 
+export 'profile/profile.dart';
+export 'profile/crop_image_view.dart';
+
 export 'home.dart';
-export 'profile.dart';

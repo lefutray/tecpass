@@ -9,7 +9,6 @@ import 'package:octo_image/octo_image.dart';
 import 'package:tec_pass/app/app.dart';
 import 'package:tec_pass/bloc/bloc.dart';
 import 'package:tec_pass/helpers/helpers.dart';
-import 'package:tec_pass/helpers/photo_picker.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);

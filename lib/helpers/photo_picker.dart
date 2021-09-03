@@ -1,12 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'package:tec_pass/bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of 'helpers.dart';
 
 Future<File?> _takePhoto(ImageSource source) async {
   final ImagePicker _picker = ImagePicker();
@@ -24,6 +16,22 @@ Future<File?> _takePhoto(ImageSource source) async {
 }
 
 _sourceOptions(BuildContext context) {
+  handlePhoto(File photo) async {
+    final Uint8List? unit8listPhoto = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CropImageView(
+          image: photo.readAsBytesSync(),
+        ),
+      ),
+    );
+    if (unit8listPhoto != null) {
+      final stringPhoto = base64Encode(unit8listPhoto);
+      context.read<UserBloc>().add(PhotoChanged(stringPhoto));
+    }
+    Navigator.pop(context);
+  }
+
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,10 +40,7 @@ _sourceOptions(BuildContext context) {
         icon: Icon(Icons.camera, color: Colors.black),
         onPressed: () async {
           final photo = await _takePhoto(ImageSource.camera);
-          if (photo != null) {
-            final stringPhoto = base64Encode(photo.readAsBytesSync());
-            context.read<UserBloc>().add(PhotoChanged(stringPhoto));
-          }
+          if (photo != null) await handlePhoto(photo);
         },
         label: Text('Cámara', style: TextStyle(color: Colors.black)),
       ),
@@ -43,10 +48,7 @@ _sourceOptions(BuildContext context) {
         icon: Icon(Icons.image, color: Colors.black),
         onPressed: () async {
           final photo = await _takePhoto(ImageSource.gallery);
-          if (photo != null) {
-            final stringPhoto = base64Encode(photo.readAsBytesSync());
-            context.read<UserBloc>().add(PhotoChanged(stringPhoto));
-          }
+          if (photo != null) await handlePhoto(photo);
         },
         label: Text('Galería', style: TextStyle(color: Colors.black)),
       ),
