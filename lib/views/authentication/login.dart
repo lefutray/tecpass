@@ -83,6 +83,7 @@ class _TextFields extends StatelessWidget {
                     icon: Icons.lock_open_outlined,
                     initialValue: state.password,
                     autofillHints: [AutofillHints.password],
+                    inputType: TextInputType.visiblePassword,
                     onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
                     validator: (_) => state.validateField('password'),
                     obscureText: true,

@@ -9,20 +9,18 @@ import 'package:tec_pass/app/app.dart';
 import 'package:tec_pass/bloc/bloc.dart';
 import 'package:tec_pass/helpers/helpers.dart';
 
-final app = App();
-
 void main() async {
+  final app = App();
   WidgetsFlutterBinding.ensureInitialized();
-  await app.initialize(); // Initialize the Flutter app.
+  await app.initialize(); // Initialize the app settings.
 
-  runApp(
-    MyApp(),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final app = App();
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => CustomNavBarBloc()),
@@ -50,9 +48,12 @@ class MyMaterialApp extends StatefulWidget {
 }
 
 class _MyMaterialAppState extends State<MyMaterialApp> {
+  final app = App();
+
   @override
   void initState() {
     cacheImages(context);
+    app.initOneSignal(context);
     SchedulerBinding.instance?.addPostFrameCallback((_) {
       FeatureDiscovery.discoverFeatures(context, app.discoveryItems);
     });

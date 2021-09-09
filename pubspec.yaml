@@ -31,7 +31,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   feature_discovery: ^0.14.0
   flutter_bloc: ^7.1.0
-  flutter_contacts: ^1.1.0+3
+  flutter_contacts: ^1.1.0+4
   flutter_multi_formatter: ^2.3.5
   flutter_sms: ^2.3.1
   flutter_svg: ^0.22.0
@@ -43,6 +43,7 @@ dependencies:
   local_auth: ^1.1.7
   lottie: ^1.1.0
   octo_image: ^1.0.0+1
+  onesignal_flutter: ^3.2.3
   path_provider: ^2.0.3
   permission_handler: ^8.1.4+2
   qr_flutter: ^4.0.0
@@ -52,13 +53,20 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.9.2
+  flutter_native_splash: ^1.2.3
   lints: ^1.0.1
 
 flutter_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/logo-1x1.png"
+  image_path: dev_assets/logo-1x1.png
+
+flutter_native_splash:
+  color: "#303030"
+  image: dev_assets/logo-1x1.png
+  android: true
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

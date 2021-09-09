@@ -21,7 +21,7 @@ class RegisterPage extends StatelessWidget {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
-            print(state.formStatus);
+            debugPrint(state.formStatus.toString());
             if (state.formStatus is SubmissionSuccess) {
               Navigator.of(context).pushReplacementNamed('home');
               context.read<RegisterBloc>().add(RegisterFinished());
@@ -85,6 +85,7 @@ class __TextFieldsState extends State<_TextFields> {
                 labelText: 'Nombre completo',
                 hintText: 'John Doe',
                 initialValue: state.fullName,
+                inputType: TextInputType.name,
                 icon: Icons.account_circle_outlined,
                 validator: (_) => state.validateField('name'),
                 onChanged: (fullName) {
@@ -131,7 +132,7 @@ class __TextFieldsState extends State<_TextFields> {
                 hintText: 'Debe tener al menos 8 caracteres',
                 initialValue: state.password,
                 icon: Icons.lock_open_outlined,
-                inputType: TextInputType.text,
+                inputType: TextInputType.visiblePassword,
                 obscureText: true,
                 validator: (_) => state.validateField('password'),
                 onChanged: (password) {
@@ -141,7 +142,7 @@ class __TextFieldsState extends State<_TextFields> {
               CustomTextField(
                 labelText: 'Confirmar contraseña',
                 initialValue: state.passwordConfirmation,
-                inputType: TextInputType.text,
+                inputType: TextInputType.visiblePassword,
                 icon: Icons.lock_open_outlined,
                 obscureText: true,
                 validator: (_) => state.validateField('passwordConfirmation'),

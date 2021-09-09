@@ -33,7 +33,7 @@ class CustomFeatureOverlay extends StatelessWidget {
       },
       featureId: featureId,
       targetColor: targetColor,
-      barrierDismissible: false,
+      barrierDismissible: true,
       backgroundColor: Colors.black,
       backgroundOpacity: 0.7,
       title: (title == null) ? null : Text(title!),

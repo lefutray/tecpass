@@ -24,24 +24,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.copyWith(password: (event as LoginPasswordChanged).password, formStatus: InitialFormStatus());
         break;
       case LoginSubmitted:
-        yield state.copyWith(formStatus: FormSubmitting());
-        try {
-          // try to login
-          final List<AuthError?> errors = await app.authRepository.login(email: state.email, password: state.password);
-
-          if (errors.isEmpty) {
-            yield LoginState(formStatus: SubmissionSuccess(), formKey: state.formKey);
-          } else {
-            yield state.copyWith(formStatus: SubmissionFailure(errors: errors));
-          }
-        } catch (error) {
-          // Show the error message if it fails
-          yield state.copyWith(formStatus: SubmissionFailure());
-        }
+        yield* loginSubmittedEvent();
         break;
       case LoginFinished:
         yield state.copyWith(formStatus: InitialFormStatus());
         break;
+    }
+  }
+
+  Stream<LoginState> loginSubmittedEvent() async* {
+    yield state.copyWith(formStatus: FormSubmitting());
+    try {
+      // try to login
+      final List<AuthError?> errors = await app.authRepository.login(email: state.email, password: state.password);
+
+      if (errors.isEmpty) {
+        yield LoginState(formStatus: SubmissionSuccess(), formKey: state.formKey);
+      } else {
+        yield state.copyWith(formStatus: SubmissionFailure(errors: errors));
+      }
+    } catch (error) {
+      // Show the error message if it fails
+      yield state.copyWith(formStatus: SubmissionFailure());
     }
   }
 }

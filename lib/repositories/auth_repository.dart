@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -27,7 +28,7 @@ class AuthRepository {
       body: body,
     );
 
-    print('response: ' + response.body);
+    debugPrint('response: ' + response.body);
 
     final jsonResponse = json.decode(response.body);
 
@@ -37,6 +38,9 @@ class AuthRepository {
         preferences.setString('name', jsonResponse['user']['name']),
         preferences.setString('accessToken', jsonResponse['accessToken']),
         preferences.setString('refreshToken', jsonResponse['refreshToken']),
+        preferences.setString('smsNumber', jsonResponse['user']['phone']),
+        OneSignal.shared.sendTag('smsNumber', jsonResponse['user']['phone']),
+        OneSignal.shared.setEmail(email: email),
       ]);
       return [];
     } else if (response.statusCode == 400) {
@@ -78,6 +82,9 @@ class AuthRepository {
         preferences.setString('name', jsonResponse['user']['name']),
         preferences.setString('accessToken', jsonResponse['accessToken']),
         preferences.setString('refreshToken', jsonResponse['refreshToken']),
+        preferences.setString('smsNumber', jsonResponse['user']['phone']),
+        OneSignal.shared.sendTag('smsNumber', jsonResponse['user']['phone']),
+        OneSignal.shared.setEmail(email: email),
       ]);
       return [];
     } else if (response.statusCode == 400) {
@@ -88,7 +95,11 @@ class AuthRepository {
 
   Future<void> logout(BuildContext context) async {
     if (await LocalAuthentication().canCheckBiometrics) {
-      await preferences.setBool('isLoggedIn', false);
+      Future.wait([
+        preferences.setBool('isLoggedIn', false),
+        OneSignal().logoutEmail(),
+        OneSignal().deleteTag('smsNumber'),
+      ]);
       Navigator.of(context).pushReplacementNamed('relogin');
     } else {
       await deleteSession(context);
@@ -104,6 +115,7 @@ class AuthRepository {
       preferences.remove('authToken'),
       preferences.remove('refreshToken'),
       preferences.remove('name'),
+      preferences.remove('smsNumber'),
     ]);
     Navigator.of(context).pushReplacementNamed('login');
   }

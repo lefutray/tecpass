@@ -13,7 +13,7 @@ class AppTheme {
 
   ThemeData _auto() {
     changeTheme('light');
-    
+
     return lightTheme;
   }
 
@@ -50,6 +50,10 @@ class AppTheme {
   );
 
   final _darkTheme = ThemeData.dark().copyWith(
+    appBarTheme: AppBarTheme(
+      backgroundColor: ThemeData.dark().scaffoldBackgroundColor,
+      centerTitle: true,
+    ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white54,

@@ -13,6 +13,9 @@ PODS:
     - Flutter
   - local_auth (0.0.1):
     - Flutter
+  - onesignal_flutter (3.2.3):
+    - Flutter
+    - OneSignalXCFramework (= 3.7.0)
   - OneSignalXCFramework (3.7.0)
   - path_provider (0.0.1):
     - Flutter
@@ -32,6 +35,7 @@ DEPENDENCIES:
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - local_auth (from `.symlinks/plugins/local_auth/ios`)
+  - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - OneSignalXCFramework (< 4.0, >= 3.4.3)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -58,6 +62,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   local_auth:
     :path: ".symlinks/plugins/local_auth/ios"
+  onesignal_flutter:
+    :path: ".symlinks/plugins/onesignal_flutter/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
@@ -75,6 +81,7 @@ SPEC CHECKSUMS:
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
   local_auth: 25938960984c3a7f6e3253e3f8d962fdd16852bd
+  onesignal_flutter: abfc75e8d08a0d9c977aacfab9454af58f4f4fcc
   OneSignalXCFramework: 974dc438d68910cf04f3c8ab034e0131d41438c1
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
@@ -82,6 +89,6 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: c35adc226c92569a920ea7f2fc97bd9d5d9303e0
+PODFILE CHECKSUM: ee9a105d3b402f86924cd34e8c047fb812b1f84c
 
 COCOAPODS: 1.10.1

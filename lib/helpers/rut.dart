@@ -44,7 +44,7 @@ class RUTValidator {
       numbers = getRutNumbers(value);
       dv = getRutDV(value);
     } catch (e) {
-      print('RUT Validation AuthError: $e');
+      debugPrint('RUT Validation AuthError: $e');
       return validationErrorText;
     }
 
@@ -85,7 +85,7 @@ class RUTValidator {
   ///de un texto.
   ///* _Ejemplo_:
   ///```
-  ///print(RUTValidator.deformat('12.933.245-2'));//129332452
+  ///debugPrint(RUTValidator.deformat('12.933.245-2'));//129332452
   ///```
   static String deFormat(String value) {
     return value.split('.').join('').split('-').join('');
@@ -94,7 +94,7 @@ class RUTValidator {
   ///Quita el formato específico de RUT
   ///de un text y lo deja con el guión.
   ///```
-  ///print(RUTValidator.deformat('12.933.245-2'));//12933245-2
+  ///debugPrint(RUTValidator.deformat('12.933.245-2'));//12933245-2
   ///```
   static String deFormatWithHyphen(String value) {
     return value.split('.').join('');

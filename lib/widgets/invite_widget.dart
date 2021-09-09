@@ -75,7 +75,7 @@ class InviteWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 10, bottom: (inviteTitle != 'Rechazada') ? 20 : 0),
                 child: Text(
-                  printDate(invite) + ' - ' + printTime(invite),
+                  debugPrintDate(invite) + ' - ' + debugPrintTime(invite),
                   style: TextStyle(color: Color(0xFFF3F4F6), fontSize: 15, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -94,12 +94,12 @@ class InviteWidget extends StatelessWidget {
     );
   }
 
-  String printDate(Invite invite) {
+  String debugPrintDate(Invite invite) {
     final date = DateFormat("dd/MM/yyyy").format(invite.date);
     return date;
   }
 
-  String printTime(Invite invite) {
+  String debugPrintTime(Invite invite) {
     final date = DateFormat("HH:mm").format(invite.date);
     return date + 'hs';
   }
