@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meta/meta.dart';
 
 import 'package:tec_pass/features/auth/common/form_submission_status.dart';
@@ -41,12 +40,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final List<AuthError?> errors = await app.authRepository.login(email: state.email, password: state.password);
 
       if (errors.isEmpty) {
-        yield LoginState(formStatus: SubmissionSuccess(), formKey: state.formKey);
+        yield state.copyWith(formStatus: SubmissionSuccess());
       } else {
         yield state.copyWith(formStatus: SubmissionFailure(errors: errors));
+        for (var element in errors) {
+          print(element?.param);
+        }
       }
     } catch (error) {
       // Show the error message if it fails
+      print(error);
       yield state.copyWith(formStatus: SubmissionFailure());
     }
   }

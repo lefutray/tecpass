@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => NavbarCubit()),
         BlocProvider(create: (_) => ContactsBloc()),
-        BlocProvider(create: (_) => LoginBloc()),
         BlocProvider(create: (_) => RegisterBloc()),
+        BlocProvider(create: (_) => LoginBloc()),
         BlocProvider(create: (_) => UserBloc(app.preferences)..loadPhoto()),
       ],
       child: FeatureDiscovery(

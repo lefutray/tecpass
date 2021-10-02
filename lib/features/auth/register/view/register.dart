@@ -22,7 +22,6 @@ class RegisterPage extends StatelessWidget {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
-            debugPrint(state.formStatus.toString());
             if (state.formStatus is SubmissionSuccess) {
               Navigator.of(context).pushReplacementNamed('home');
               context.read<RegisterBloc>().add(RegisterFinished());
@@ -38,6 +37,7 @@ class RegisterPage extends StatelessWidget {
                     Center(child: AppLogo()),
                     SizedBox(height: constraints.maxHeight * 0.1),
                     _TextFields(),
+                    _Errors(),
                     _Options(),
                   ],
                 ),
@@ -46,6 +46,21 @@ class RegisterPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Errors extends StatelessWidget {
+  const _Errors({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      builder: (context, state) {
+        final error = state.getGeneralErrors();
+        if (error.isEmpty) return Container();
+        return Text(error, style: TextStyle(color: Colors.red, backgroundColor: Theme.of(context).scaffoldBackgroundColor));
+      },
     );
   }
 }

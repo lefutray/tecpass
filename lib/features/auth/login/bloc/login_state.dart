@@ -4,6 +4,7 @@ class LoginState {
   final String email;
   final String password;
   final GlobalKey<FormState> formKey;
+  final FormSubmissionStatus formStatus;
 
   String? validateField(String field) {
     String? errors = getErrorsFromParam(field);
@@ -15,13 +16,22 @@ class LoginState {
     String errors = '';
     if (formStatus is SubmissionFailure) {
       if ((formStatus as SubmissionFailure).errors.isNotEmpty) {
-        for (final error in (formStatus as SubmissionFailure).errors) {
-          print('ERROR: ${error?.msg}, ${error?.location}, ${error?.param}');
-          if (error?.param == 'general') {
-            Fluttertoast.showToast(msg: error?.msg ?? '');
+        final errorsAPI = (formStatus as SubmissionFailure).errors.where((element) => element?.param == param);
+        if (errorsAPI.isNotEmpty) {
+          for (final error in errorsAPI) {
+            errors = _addToNextLine(errors, error!.msg!);
           }
         }
-        final errorsAPI = (formStatus as SubmissionFailure).errors.where((element) => element?.param == param);
+      }
+    }
+    return errors;
+  }
+
+  String getGeneralErrors() {
+    String errors = '';
+    if (formStatus is SubmissionFailure) {
+      if ((formStatus as SubmissionFailure).errors.isNotEmpty) {
+        final errorsAPI = (formStatus as SubmissionFailure).errors.where((element) => element?.param == 'server' || element?.param == 'general');
         if (errorsAPI.isNotEmpty) {
           for (final error in errorsAPI) {
             errors = _addToNextLine(errors, error!.msg!);
@@ -39,8 +49,6 @@ class LoginState {
       return add;
     }
   }
-
-  final FormSubmissionStatus formStatus;
 
   LoginState({
     this.email = '',

@@ -34,6 +34,21 @@ class RegisterState {
     return errors;
   }
 
+  String getGeneralErrors() {
+    String errors = '';
+    if (formStatus is SubmissionFailure) {
+      if ((formStatus as SubmissionFailure).errors.isNotEmpty) {
+        final errorsAPI = (formStatus as SubmissionFailure).errors.where((element) => element?.param == 'server' || element?.param == 'general');
+        if (errorsAPI.isNotEmpty) {
+          for (final error in errorsAPI) {
+            errors = _addToNextLine(errors, error!.msg!);
+          }
+        }
+      }
+    }
+    return errors;
+  }
+
   _addToNextLine(String text, String add) {
     if (text.isNotEmpty) {
       return text + '\n' + add;

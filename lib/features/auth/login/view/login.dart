@@ -10,16 +10,16 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
-      listener: (context, state) {
-        if (state.formStatus is SubmissionSuccess) {
-          Navigator.of(context).pushReplacementNamed('home');
-          context.read<LoginBloc>().add(LoginFinished());
-        }
-      },
-      child: Scaffold(
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: BlocListener<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state.formStatus is SubmissionSuccess) {
+              Navigator.of(context).pushReplacementNamed('home');
+              context.read<LoginBloc>().add(LoginFinished());
+            }
+          },
           child: Stack(
             children: [
               Align(
@@ -50,8 +50,24 @@ class _Options extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _TextFields(),
+        _Errors(),
         _Buttons(),
       ],
+    );
+  }
+}
+
+class _Errors extends StatelessWidget {
+  const _Errors({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        final error = state.getGeneralErrors();
+        if (error.isEmpty) return Container();
+        return Text(error, style: TextStyle(color: Colors.red, backgroundColor: Theme.of(context).scaffoldBackgroundColor));
+      },
     );
   }
 }
