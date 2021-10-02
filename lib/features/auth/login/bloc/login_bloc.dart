@@ -43,13 +43,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.copyWith(formStatus: SubmissionSuccess());
       } else {
         yield state.copyWith(formStatus: SubmissionFailure(errors: errors));
-        for (var element in errors) {
-          print(element?.param);
-        }
       }
     } catch (error) {
       // Show the error message if it fails
-      print(error);
       yield state.copyWith(formStatus: SubmissionFailure());
     }
   }

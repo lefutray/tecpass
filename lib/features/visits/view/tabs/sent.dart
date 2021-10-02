@@ -20,6 +20,7 @@ class SentPage extends StatelessWidget {
             address: 'Av. Rivadavia 2344',
             query: 'Av. Rivadavia 2344',
             floor: '3',
+            accessType: AccessType.walk,
           ),
           status: InviteStatus.pending,
         ),
@@ -33,6 +34,7 @@ class SentPage extends StatelessWidget {
             address: 'Av. Rivadavia 2344',
             query: 'Av. Rivadavia 2344',
             floor: '3',
+            accessType: AccessType.car,
           ),
           status: InviteStatus.accepted,
         ),
@@ -46,6 +48,7 @@ class SentPage extends StatelessWidget {
             address: 'Av. Rivadavia 2344',
             query: 'Av. Rivadavia 2344',
             floor: '3',
+            accessType: AccessType.bike,
           ),
           status: InviteStatus.declined,
         ),
@@ -53,6 +56,7 @@ class SentPage extends StatelessWidget {
     ];
     return Scaffold(
       body: ListView.builder(
+        physics: BouncingScrollPhysics(),
         itemCount: 20,
         itemBuilder: (BuildContext context, int index) {
           return FadeIn(

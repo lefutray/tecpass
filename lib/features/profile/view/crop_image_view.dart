@@ -17,6 +17,12 @@ class _CropImageViewState extends State<CropImageView> {
   StreamController<CropStatus> status = StreamController.broadcast();
 
   @override
+  void initState() {
+    super.initState();
+    status.add(CropStatus.loading);
+  }
+
+  @override
   void dispose() {
     status.close();
     super.dispose();
@@ -45,18 +51,23 @@ class _CropImageViewState extends State<CropImageView> {
                 right: 0,
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      MaterialButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('Cancelar', style: TextStyle(color: Colors.white, fontSize: 18)),
-                      ),
-                      MaterialButton(
-                        onPressed: () => controller.crop(),
-                        child: Text('Guardar', style: TextStyle(color: Colors.white, fontSize: 18)),
-                      ),
-                    ],
+                  child: StreamBuilder(
+                    stream: status.stream,
+                    builder: (context, snapshot) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          MaterialButton(
+                            onPressed: (snapshot.data == CropStatus.ready || snapshot.data == CropStatus.cropping) ? () => Navigator.pop(context) : null,
+                            child: Text('Cancelar', style: TextStyle(color: Colors.white, fontSize: 18)),
+                          ),
+                          MaterialButton(
+                            onPressed: (snapshot.data == CropStatus.ready || snapshot.data == CropStatus.cropping) ? () => controller. crop() : null,
+                            child: Text('Guardar', style: TextStyle(color: Colors.white, fontSize: 18)),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),

@@ -1,60 +1,65 @@
+import 'package:animate_do/animate_do.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:tec_pass/features/access/view/tabs/access_bikes.dart';
-import 'package:tec_pass/features/access/view/tabs/access_cars.dart';
-import 'package:tec_pass/features/access/view/tabs/access_people.dart';
+import 'package:tec_pass/models/models.dart';
+import 'package:tec_pass/widgets/widgets.dart';
 
-import 'package:tec_pass/helpers/helpers.dart';
-
-class AccessView extends StatefulWidget {
-  const AccessView({Key? key}) : super(key: key);
-
-  @override
-  _AccessViewState createState() => _AccessViewState();
-}
-
-class _AccessViewState extends State<AccessView> with SingleTickerProviderStateMixin {
-  late final TabController tabController;
-
-  @override
-  void initState() {
-    tabController = TabController(length: 3, vsync: this);
-    tabController.addListener(() {
-      if (!tabController.indexIsChanging && tabController.index != 0) {
-        portraitOnly();
-      } else {
-        allOrientations();
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
-
+class AccessView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TabBar(
-        controller: tabController,
-        indicatorColor: Colors.green,
-        tabs: [
-          Tab(text: "Personas", icon: Icon(Icons.person)),
-          Tab(text: "Autos", icon: Icon(FontAwesomeIcons.car)),
-          Tab(text: "Bicicletas", icon: Icon(FontAwesomeIcons.bicycle)),
-        ],
+    final widgets = [
+      PlaceWidget(place: Place(id: 'asdas', name: 'Oficina 401', address: 'Av. Rivadavia 2344', query: 'Av. Rivadavia 2344', floor: '3', accessType: AccessType.walk)),
+      PlaceWidget(place: Place(id: 'asdas', name: 'Oficina 510', address: 'Av. Rivadavia 2344', query: 'Av. Rivadavia 2344', floor: '3', accessType: AccessType.car)),
+      PlaceWidget(place: Place(id: 'asdas', name: 'Puerta Principal', address: 'Av. Rivadavia 2344', query: 'Av. Rivadavia 2344', floor: '3', accessType: AccessType.bike)),
+    ];
+    final showcaseWidget = PlaceWidget(
+      place: Place(
+        id: 'asdas',
+        name: 'Puerta Principal',
+        address: 'Av. Rivadavia 2344',
+        query: 'Av. Rivadavia 2344',
+        floor: '3',
+        accessType: AccessType.walk,
       ),
-      body: TabBarView(
-        controller: tabController,
-        children: [
-          AccessPeopleView(),
-          AccessCarsView(),
-          AccessBikesView(),
-        ],
+      showcase: true,
+    );
+
+    final refreshController = RefreshController(initialRefresh: false);
+
+    return Scaffold(
+      body: SmartRefresher(
+        enablePullDown: true,
+        header: ClassicHeader(
+          refreshingIcon: SizedBox(
+            width: 25,
+            height: 25,
+            child: defaultTargetPlatform == TargetPlatform.iOS ? const CupertinoActivityIndicator() : const CircularProgressIndicator(strokeWidth: 2, color: Colors.grey),
+          ),
+          idleText: "Suelte para actualizar",
+          completeText: "Actualizado",
+          releaseText: "Suelte para actualizar",
+          canTwoLevelText: "Suelte para entrar al segundo nivel",
+          refreshingText: "Actualizando…",
+          failedText: "Error al actualizar",
+        ),
+        controller: refreshController,
+        onRefresh: () async {
+          await Future.delayed(Duration(seconds: 1));
+          refreshController.refreshCompleted();
+        },
+        child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          itemCount: 20,
+          itemBuilder: (BuildContext context, int index) {
+            return FadeIn(
+              duration: Duration(milliseconds: 500),
+              child: index == 0 ? showcaseWidget : widgets[index % 3],
+            );
+          },
+        ),
       ),
     );
   }

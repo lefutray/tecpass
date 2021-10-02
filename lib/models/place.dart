@@ -1,11 +1,14 @@
 part of 'models.dart';
 
+enum AccessType { walk, bike, car }
+
 class Place {
   final String id;
   final String query;
   final String address;
   final String? floor;
   final String? additionalInfo;
+  final AccessType accessType;
   final String name;
 
   Place({
@@ -13,6 +16,7 @@ class Place {
     required this.name,
     required this.query,
     required this.address,
+    required this.accessType,
     this.floor,
     this.additionalInfo,
   });

@@ -89,18 +89,22 @@ class __LoadedContactsWidgetState extends State<_LoadedContactsWidget> with Sing
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
       child: Scaffold(
-        body: Scrollbar(
-          controller: scrollController,
-          interactive: true,
-          hoverThickness: 30,
-          child: ListView(
-            controller: scrollController,
-            children: [
-              searchContact(context),
-              ...contactsList(context, widget.state.selectedContacts),
-              ...contactsList(context, widget.state.unselectedContacts),
-            ],
-          ),
+        body: Column(
+          children: [
+            searchContact(context),
+            Expanded(
+              child: Scrollbar(
+                controller: scrollController,
+                interactive: true,
+                hoverThickness: 30,
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  controller: scrollController,
+                  children: contactsList(context, widget.state.selectedContacts + widget.state.unselectedContacts),
+                ),
+              ),
+            ),
+          ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FadeTransition(

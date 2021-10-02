@@ -5,8 +5,9 @@ abstract class UserEvent {}
 
 class PhotoChanged extends UserEvent {
   final String photo;
+  final BuildContext context;
 
-  PhotoChanged(this.photo);
+  PhotoChanged(this.photo, this.context);
 }
 
 class NameChanged extends UserEvent {

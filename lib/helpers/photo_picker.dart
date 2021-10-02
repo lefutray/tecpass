@@ -25,7 +25,7 @@ _sourceOptions(BuildContext context) {
     );
     if (unit8listPhoto != null) {
       final stringPhoto = base64Encode(unit8listPhoto);
-      context.read<UserBloc>().add(PhotoChanged(stringPhoto));
+      context.read<UserBloc>().add(PhotoChanged(stringPhoto, context));
     }
     Navigator.pop(context);
   }
@@ -60,7 +60,7 @@ _sourceOptions(BuildContext context) {
             await confirmationPopup(
               context,
               title: '¿Está seguro de que quiere borrar la foto?',
-              onConfirm: () => context.read<UserBloc>().add(PhotoChanged('')),
+              onConfirm: () => context.read<UserBloc>().add(PhotoChanged('', context)),
             );
           },
         ),

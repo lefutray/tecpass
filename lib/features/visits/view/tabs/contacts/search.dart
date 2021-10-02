@@ -46,6 +46,7 @@ class ContactSearch extends SearchDelegate<Contact?> {
         suggestions.addAll(state.unselectedContacts.where(resultMatches).toList());
         if (query.isEmpty) {
           return ListView.builder(
+            physics: BouncingScrollPhysics(),
             itemCount: 1,
             itemBuilder: (BuildContext context, int index) {
               return Column(
@@ -57,7 +58,10 @@ class ContactSearch extends SearchDelegate<Contact?> {
             },
           );
         }
-        return ListView(children: contactsList(context, suggestions));
+        return ListView(
+          physics: BouncingScrollPhysics(),
+          children: contactsList(context, suggestions),
+        );
       },
     );
   }

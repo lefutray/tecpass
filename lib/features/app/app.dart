@@ -95,7 +95,8 @@ class App {
   String? get email => preferences.getString('email');
   String? get phone => preferences.getString('phone');
   String? get name => preferences.getString('name');
-  String? get authToken => preferences.getString('authToken');
+  String? get accessToken => preferences.getString('accessToken');
+  String? get refreshToken => preferences.getString('refreshToken');
   String? get imageBase64 => preferences.getString('image');
 
   final Set<String> discoveryItems = {

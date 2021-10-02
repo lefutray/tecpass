@@ -1,9 +1,20 @@
 part of 'widgets.dart';
 
-class UserPhoto extends StatelessWidget {
+class UserPhoto extends StatefulWidget {
   const UserPhoto({this.editOption = false, Key? key}) : super(key: key);
 
   final bool editOption;
+
+  @override
+  State<UserPhoto> createState() => _UserPhotoState();
+}
+
+class _UserPhotoState extends State<UserPhoto> {
+  @override
+  void initState() {
+    context.read<UserBloc>().loadPhoto(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +29,10 @@ class UserPhoto extends StatelessWidget {
         children: [
           BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {
-              if (state.base64Photo != null) {
+              final photo = state.base64Photo;
+              if (photo != null && photo.isNotEmpty) {
                 return OctoImage(
-                  image: MemoryImage(Uint8List.fromList(base64Decode(state.base64Photo!))),
+                  image: MemoryImage(Uint8List.fromList(base64Decode(photo))),
                   imageBuilder: OctoImageTransformer.circleAvatar(),
                   placeholderBuilder: (_) => _noImage(size),
                   errorBuilder: (_, __, ___) => _noImage(size),
@@ -35,7 +47,7 @@ class UserPhoto extends StatelessWidget {
             },
           ),
           Visibility(
-            visible: editOption,
+            visible: widget.editOption,
             child: Positioned(
               bottom: 10,
               right: 0,

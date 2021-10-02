@@ -43,6 +43,10 @@ class AuthRepository {
         preferences.setBool('isLoggedIn', true),
       ]);
 
+      if (jsonResponse['user']['image'] != null) {
+        preferences.setString('photo', phoneNumber ?? jsonResponse['user']['image']);
+      }
+
       OneSignal.shared.sendTag('phone', phoneNumber ?? jsonResponse['user']['phone']);
       OneSignal.shared.sendTag('email', email);
 
@@ -115,14 +119,14 @@ class AuthRepository {
       await deleteSession(context);
       Navigator.of(context).pushReplacementNamed('login');
     }
-    BlocProvider.of<NavbarCubit>(context).emit(0);
+    BlocProvider.of<NavbarCubit>(context).viewAccess();
   }
 
   Future<void> deleteSession(BuildContext context) async {
     await Future.wait([
       preferences.setBool('isLoggedIn', false),
       preferences.remove('email'),
-      preferences.remove('authToken'),
+      preferences.remove('accessToken'),
       preferences.remove('refreshToken'),
       preferences.remove('name'),
       preferences.remove('phone'),

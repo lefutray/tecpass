@@ -1,5 +1,11 @@
 part of 'widgets.dart';
 
+Map<AccessType, IconData> accessTypeMap = {
+  AccessType.walk: Icons.directions_walk,
+  AccessType.bike: Icons.directions_bike,
+  AccessType.car: Icons.directions_car,
+};
+
 class PlaceWidget extends StatelessWidget {
   const PlaceWidget({
     Key? key,
@@ -30,9 +36,10 @@ class PlaceWidget extends StatelessWidget {
     return ListTile(
       onTap: () => place.showDetails(context),
       contentPadding: EdgeInsets.all(20),
+      leading: Icon(accessTypeMap[place.accessType]),
       title: Text(
         place.name,
-        style: TextStyle(color: Colors.white, fontSize: 20),
+        style: TextStyle(color: Colors.white, fontSize: 18),
         overflow: TextOverflow.ellipsis,
       ),
       trailing: Row(
@@ -73,65 +80,18 @@ class _TriangleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
+    return MaterialButton(
+      shape: CircleBorder(),
       padding: EdgeInsets.zero,
-      onPressed: onPressed,
-      icon: Transform.rotate(
-        angle: inverted ? math.pi : 0,
-        child: CustomPaint(
-          painter: _TrianglePainter(strokeColor: color),
-          child: Container(
-            height: size,
-            width: size,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(size * 0.6),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  spreadRadius: 4,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-          ),
-        ),
+      color: color,
+      minWidth: size,
+      height: size,
+      child: Icon(
+        inverted ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
+        size: size,
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
+      onPressed: onPressed,
     );
-  }
-}
-
-class _TrianglePainter extends CustomPainter {
-  final Color strokeColor;
-  final PaintingStyle paintingStyle;
-  final double strokeWidth;
-
-  _TrianglePainter({
-    this.strokeColor = Colors.green,
-    this.strokeWidth = 1,
-    this.paintingStyle = PaintingStyle.fill,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = strokeColor
-      ..strokeWidth = strokeWidth
-      ..style = paintingStyle;
-
-    canvas.drawPath(getTrianglePath(size.width, size.height), paint);
-  }
-
-  Path getTrianglePath(double x, double y) {
-    return Path()
-      ..moveTo(0, y)
-      ..lineTo(x / 2, 0)
-      ..lineTo(x, y)
-      ..lineTo(0, y);
-  }
-
-  @override
-  bool shouldRepaint(_TrianglePainter oldDelegate) {
-    return oldDelegate.strokeColor != strokeColor || oldDelegate.paintingStyle != paintingStyle || oldDelegate.strokeWidth != strokeWidth;
   }
 }

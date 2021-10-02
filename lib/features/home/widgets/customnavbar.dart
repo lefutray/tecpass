@@ -10,6 +10,8 @@ class CustomNavBar extends StatelessWidget {
       builder: (BuildContext context, int state) {
         return BottomNavigationBar(
           currentIndex: state,
+          showUnselectedLabels: true,
+          type: BottomNavigationBarType.fixed,
           onTap: (index) => (index != state) ? context.read<NavbarCubit>().emit(index) : null,
           items: [
             BottomNavigationBarItem(
@@ -35,13 +37,24 @@ class CustomNavBar extends StatelessWidget {
               label: 'Visitas',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.location_history_outlined),
+              icon: Icon(Icons.history),
+              activeIcon: CustomFeatureOverlay(
+                featureId: 'history_tab',
+                title: 'Historial',
+                description: 'Aquí podrás ver tus acciones recientes.',
+                tapTarget: Icon(Icons.history, color: Colors.black),
+                child: Icon(Icons.history),
+              ),
+              label: 'Historial',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings_outlined),
               activeIcon: CustomFeatureOverlay(
                 featureId: 'perfil_tab',
-                title: 'Visitas',
+                title: 'Perfil',
                 description: 'Aquí podrás editar tu información personal y configuración de la aplicación.',
-                tapTarget: Icon(Icons.location_history_rounded, color: Colors.black),
-                child: Icon(Icons.location_history_rounded),
+                tapTarget: Icon(Icons.settings_rounded, color: Colors.black),
+                child: Icon(Icons.settings_rounded),
               ),
               label: 'Perfil',
             )

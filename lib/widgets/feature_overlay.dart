@@ -23,11 +23,11 @@ class CustomFeatureOverlay extends StatelessWidget {
       onComplete: () async {
         if (featureId == 'place_exit_widget') {
           FeatureDiscovery.completeCurrentStep(context);
-          BlocProvider.of<NavbarCubit>(context).emit(1);
+          BlocProvider.of<NavbarCubit>(context).viewVisits();
         }
         if (featureId == 'visits_tab') {
           FeatureDiscovery.completeCurrentStep(context);
-          BlocProvider.of<NavbarCubit>(context).emit(2);
+          BlocProvider.of<NavbarCubit>(context).viewProfile();
         }
         return await Future.value(true);
       },

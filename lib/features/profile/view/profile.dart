@@ -15,12 +15,25 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = App();
     return Scaffold(
-      body: ListView(
-        children: [
-          UserPhoto(editOption: true),
-          _UserData(app),
-          _Options(app),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraint) {
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraint.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: <Widget>[
+                    UserPhoto(editOption: true),
+                    _UserData(app),
+                    Expanded(child: Container()),
+                    _Options(app),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -74,7 +87,7 @@ class _Options extends StatelessWidget {
             confirmationPopup(context, title: '¿Desea mostrar el tutorial?', onConfirm: () async {
               await FeatureDiscovery.clearPreferences(context, app.discoveryItems);
               FeatureDiscovery.discoverFeatures(context, app.discoveryItems);
-              BlocProvider.of<NavbarCubit>(context).emit(0);
+              BlocProvider.of<NavbarCubit>(context).viewAccess();
             });
           },
         ),
