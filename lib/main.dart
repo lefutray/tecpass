@@ -5,8 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
-import 'package:tec_pass/app/app.dart';
-import 'package:tec_pass/bloc/bloc.dart';
+import 'package:tec_pass/features/app/app.dart';
+import 'package:tec_pass/features/auth/login/bloc/login_bloc.dart';
+import 'package:tec_pass/features/auth/register/bloc/register_bloc.dart';
+import 'package:tec_pass/features/home/cubit/navbar_cubit.dart';
+import 'package:tec_pass/features/user/bloc/user_bloc.dart';
+import 'package:tec_pass/features/visits/bloc/contacts_bloc.dart';
 import 'package:tec_pass/helpers/helpers.dart';
 
 void main() async {
@@ -23,7 +27,7 @@ class MyApp extends StatelessWidget {
     final app = App();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => CustomNavBarBloc()),
+        BlocProvider(create: (_) => NavbarCubit()),
         BlocProvider(create: (_) => ContactsBloc()),
         BlocProvider(create: (_) => LoginBloc()),
         BlocProvider(create: (_) => RegisterBloc()),

@@ -15,15 +15,16 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:octo_image/octo_image.dart';
 
-import 'package:tec_pass/app/app.dart';
-import 'package:tec_pass/bloc/bloc.dart';
+import 'package:tec_pass/features/app/app.dart';
+import 'package:tec_pass/features/home/cubit/navbar_cubit.dart';
+import 'package:tec_pass/features/user/bloc/user_bloc.dart';
 import 'package:tec_pass/models/models.dart';
 import 'package:tec_pass/helpers/helpers.dart';
 
 part 'contact_widget.dart';
 part 'customappbar.dart';
-part 'customnavbar.dart';
-part 'customtextfield.dart';
+part '../features/home/widgets/customnavbar.dart';
+part '../features/auth/common/widgets/customtextfield.dart';
 part 'feature_overlay.dart';
 part 'invite_widget.dart';
 part 'place_widget.dart';

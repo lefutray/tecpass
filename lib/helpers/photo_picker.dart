@@ -20,9 +20,7 @@ _sourceOptions(BuildContext context) {
     final Uint8List? unit8listPhoto = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CropImageView(
-          image: photo.readAsBytesSync(),
-        ),
+        builder: (context) => CropImageView(image: photo.readAsBytesSync()),
       ),
     );
     if (unit8listPhoto != null) {

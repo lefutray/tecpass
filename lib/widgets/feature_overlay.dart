@@ -23,13 +23,17 @@ class CustomFeatureOverlay extends StatelessWidget {
       onComplete: () async {
         if (featureId == 'place_exit_widget') {
           FeatureDiscovery.completeCurrentStep(context);
-          BlocProvider.of<CustomNavBarBloc>(context).add(Visits());
+          BlocProvider.of<NavbarCubit>(context).emit(1);
         }
         if (featureId == 'visits_tab') {
           FeatureDiscovery.completeCurrentStep(context);
-          BlocProvider.of<CustomNavBarBloc>(context).add(Profile());
+          BlocProvider.of<NavbarCubit>(context).emit(2);
         }
         return await Future.value(true);
+      },
+      onDismiss: () async {
+        FeatureDiscovery.dismissAll(context);
+        return true;
       },
       featureId: featureId,
       targetColor: targetColor,
