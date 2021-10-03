@@ -4,10 +4,16 @@ part of 'user_bloc.dart';
 abstract class UserEvent {}
 
 class PhotoChanged extends UserEvent {
-  final String photo;
+  final String? photo;
   final BuildContext context;
 
   PhotoChanged(this.photo, this.context);
+}
+
+class PhotoLoaded extends UserEvent {
+  final String photo;
+
+  PhotoLoaded(this.photo);
 }
 
 class NameChanged extends UserEvent {

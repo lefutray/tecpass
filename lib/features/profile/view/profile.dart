@@ -95,21 +95,10 @@ class _Options extends StatelessWidget {
           title: Text('Cerrar sesión', style: TextStyle(color: Colors.white)),
           trailing: Icon(Icons.logout, color: Colors.white),
           onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                content: Text('¿Estás seguro de que quieres cerrar la sesión?'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('NO'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async => await app.authRepository.logout(context),
-                    child: Text('SÍ'),
-                  ),
-                ],
-              ),
+            confirmationPopup(
+              context,
+              title: '¿Estás seguro de que quieres cerrar la sesión?',
+              onConfirm: () async => await app.authRepository.logout(context),
             );
           },
         ),

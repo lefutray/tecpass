@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tec_pass/features/app/app.dart';
@@ -16,43 +15,45 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(SharedPreferences preferences) : super(UserState(preferences));
 
   final app = App();
+  final service = UserBackendService();
 
   loadPhoto(BuildContext context) {
     final base64Photo = state.preferences.getString('photo');
-    debugPrint('photo: $base64Photo');
-    if (base64Photo != null) {
-      add(PhotoChanged(base64Photo, context));
+    if (base64Photo != null && base64Photo.isNotEmpty) {
+      add(PhotoLoaded(base64Photo));
     }
   }
 
   @override
   Stream<UserState> mapEventToState(UserEvent event) async* {
     if (event is PhotoChanged) {
-      final service = UserBackendService();
-      final accessToken = app.accessToken;
-      final refreshToken = app.refreshToken;
+      yield state.copyWith(updatingPhoto: UpdatePhotoStatus.uploading);
 
-      if (accessToken == null || refreshToken == null) {
-        app.authRepository.logout(event.context);
-        Fluttertoast.showToast(msg: 'La sesión ha expirado');
+      final hasValidAccessToken = await service.getValidAccessToken(event.context);
+
+      if (!hasValidAccessToken) {
+        yield state.copyWith(updatingPhoto: UpdatePhotoStatus.failed);
         return;
       }
 
-      if (service.accessTokenExpired(accessToken)) {
-        final newAccessToken = await service.regenerateAccessToken(refreshToken);
-        if (newAccessToken == null) {
-          Fluttertoast.showToast(msg: 'La sesión ha expirado');
-          return;
-        }
-        await app.preferences.setString('accessToken', newAccessToken);
-      }
+      final photo = event.photo;
 
-      final changed = await service.changePhoto(event.photo, accessToken);
+      final accessToken = app.accessToken;
+      final changed = await service.changePhoto(photo, accessToken!);
 
       if (changed) {
-        state.preferences.setString('photo', event.photo);
-        yield state.copyWith(base64Photo: event.photo);
+        if (photo == null || photo.isEmpty) {
+          state.preferences.remove('photo');
+        } else {
+          state.preferences.setString('photo', photo);
+        }
+
+        yield state.copyWith(base64Photo: event.photo, updatingPhoto: UpdatePhotoStatus.uploaded);
+      } else {
+        yield state.copyWith(updatingPhoto: UpdatePhotoStatus.failed);
       }
+    } else if (event is PhotoLoaded) {
+      yield state.copyWith(base64Photo: event.photo, updatingPhoto: UpdatePhotoStatus.uploaded);
     }
   }
 }

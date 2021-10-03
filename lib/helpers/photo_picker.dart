@@ -60,7 +60,10 @@ _sourceOptions(BuildContext context) {
             await confirmationPopup(
               context,
               title: '¿Está seguro de que quiere borrar la foto?',
-              onConfirm: () => context.read<UserBloc>().add(PhotoChanged('', context)),
+              onConfirm: () {
+                context.read<UserBloc>().add(PhotoChanged(null, context));
+                Navigator.pop(context);
+              },
             );
           },
         ),
